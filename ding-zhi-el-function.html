@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>"定制EL function"</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/ding-zhi-el-function.html" rel="bookmark"
+        title="Permalink to "定制EL function"">"定制EL function"</a></h3>
+    </header>
+
+<h6 class="subheader" title="2014-02-07T00:00:00+08:00">2014-02-07(Friday) 00:00
+</h6>
+
+
+    <ul>
+<li>
+<p>平台: Jdeveloper 12c</p>
+</li>
+<li>
+<p>有时需要对字符串进行一些后再显示出来，可以写一个简单的taglib来实现，以下Demo是处理一个以冒号分隔的字符串，返回其中的第三个值。比如输入“aaa:bbb:ccc:ddd"，输出"ccc"。</p>
+</li>
+</ul>
+<h4>实现方法</h4>
+<p>创建一个空的java Project：Taglib</p>
+<ul>
+<li>创建Java类：SplitString.java    </li>
+</ul>
+<p>{% codeblock lang:java %}</p>
+<p>package cn.dengdezhao.taglib;</p>
+<p>public class SplitString {</p>
+<div class="highlight"><pre><span></span>public static String getString(String string) {
+    String[] strings = string.split(&quot;:&quot;, 3);
+    if (strings.length &gt; 2) {
+        return strings[2];
+    } else {
+        return &quot;&quot;;
+    }
+}
+</pre></div>
+
+
+<p>}</p>
+<p>{% endcodeblock %}</p>
+<ul>
+<li>创建taglib描述文件splitString.tld    </li>
+</ul>
+<p>New -&gt; From Gallery -&gt; Web Tier -&gt; JSP -&gt; JSP Tag Library</p>
+<p>类型为Deployable 文件内容如下：</p>
+<p>{% codeblock lang:xml %}</p>
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<taglib xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1" xmlns="http://java.sun.com/xml/ns/javaee">
+  <description>split String</description>
+  <display-name>splitString</display-name>
+  <tlib-version>1.0</tlib-version>
+  <short-name>splitString</short-name>
+  <uri>http://www.dengdezhao.cn/string</uri>
+  <function>
+    <display-name>getString</display-name>
+    <name>getString</name>
+    <function-class>cn.dengdezhao.taglib.SplitString</function-class>
+    <function-signature>java.lang.String getString(java.lang.String)</function-signature>
+  </function>
+</taglib>
+
+<p>{% endcodeblock %}</p>
+<ul>
+<li>将该工程发布为jar包。即完成taglib的开发工作。</li>
+</ul>
+<h4>在工程中应用该taglib</h4>
+<ul>
+<li>创建测试工程ViewController</li>
+</ul>
+<p>右键工程属性 -&gt; JSP Tag Libraries -&gt; Add</p>
+<p>将之前发布的Jar包添加进来。</p>
+<ul>
+<li>创建测试页面testTaglib.jspx</li>
+</ul>
+<p>内容如下 ：</p>
+<p>{% codeblock lang:jsp %}</p>
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:myTag="http://www.dengdezhao.cn/string" 
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="testTaglib.jspx" id="d1">
+            <af:form id="f1">
+            <af:outputText id="ot1" value="#{myTag:getString('aaa:ddd:ccc')}"/>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>
+
+<p>{% endcodeblock %}</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/el.html">EL </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

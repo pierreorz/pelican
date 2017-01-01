@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - ADF</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+
+            <article>
+                <a href="http://localhost:8000/guan-yu-vode-zhi-du-ke-xie-deng-shu-xing-she-zhi.html"><h3 class="article-title">关于VO的只读可写等属性设置</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>如果生成ViewObject 的时候选择的是只读的VO的话，会发现VO的source里有ReadOnly="true"。<br />
+需求1：在MB中我通过代码拿到这个VO的实例，我想通过以下代码添加Row
+<div>
+<blockquote>Row newRow=Vo.createRow();<br />
+newRow.setAttribute("attribute1","value1");<br />
+newRow.setAttribute("attribute2","value2");<br />
+newRow.setAttribute("attribute3","value3");<br />
+Vo.insertRow(newRow);</blockquote>
+</div>
+最终发现，只读VO无法插入数据。怎么办？将ReadOnly改成"false"之后测试，发现满足需求~！<br />
+需求2：满足需求1之后发现，Vo里的确插入数据了。如果页面上有保存按钮，也会将这个数据更改到数据库，而这个数据只是需要在MB中起过渡作用，不必将newRow的数据postChange到DB，怎么办？<br />
+VO里 这个属性DeleteParticipant 立功了。 DeleteParticipant就是控制数据是否保存到DB的。设置 DeleteParticipant="false"发现满足了需求！</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/guan-yu-vode-zhi-du-ke-xie-deng-shu-xing-she-zhi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/immediatetrue-de-yi-chang.html"><h3 class="article-title">immediate="true" 的异常</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>设置按钮的immediate="true" 可以避免因按钮提交FORM导致的页面刷新闪烁，但也会带来麻烦。<br />
+假如对表的取消按钮设置了此属性，可能会发生新增数据，然后点取消作rollback时数据显示异常。<br />
+开发时值得注意</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/immediatetrue-de-yi-chang.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/oracleshu-ju-ku-yong-hu-bei-suo-wen-ti-jie-jue.html"><h3 class="article-title">oracle数据库用户被锁问题解决</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>运行AM的时候报个JDBC连接错误，ORA-280000:用户被锁的异常。<br />
+于是在PL/SQL DEV里切换成SYSTEM用户 alter user XXX account unlock;之后，用PL/SQL DEV测试 可以连上了<br />
+再运行AM的时候，又报了个用户被锁。很是蛋疼<br />
+于是换到命令行，尝试以SYSDBA的身份再执行一次alter account unlock;<br />
+发现连不上：报了以下错误：<br />
+ORA-28056: Writing audit records to Windows Event Log failed<br />
+这你妹的，原来是系统日志满了，解决方案：<br />
+打开windows 事件查看器，将应用程序日志清理一下，重新连接数据库，连接成功。</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/oracleshu-ju-ku-yong-hu-bei-suo-wen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-zai-mbzhong-dui-selectionlistener-collectionmodelmakecurrentdiao-yong.html"><h3 class="article-title">如何在MB中对selectionListener collectionModel.makeCurrent调用</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>如何在MB中对Table的默认"#{bindings.PromotionVO1.collectionModel.makeCurrent}"进行调用？</p>
+
+<p>当需要重写adf:table的缺省的selectListener时，可以在自己绑定的MB的方法里，调用默认的makeCurrent方法。取得当前行的数据，进行自己的定制操作。方法如下：
+<div>
+<blockquote>//调用缺省makeCurrent<br />
+JSFUtils.resolveMethodExpression("#{bindings.yourVO.collectionModel.makeCurrent}",<br />
+new Class[] { SelectionEvent.class },<br />
+new Object[] { selectionEvent });</blockquote>
+</div>
+取得选中行的数据
+<div>
+<blockquote>Row selectedRow =<br />
+(Row)JSFUtils.resolveExpression("#{bindings.yourVOIterator.currentRow}");</blockquote>
+</div>
+然后就可以针对取得的数据进行定制开发了。</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-zai-mbzhong-dui-selectionlistener-collectionmodelmakecurrentdiao-yong.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/tablenei-zeng-jia-quan-xuan-checkbox.html"><h3 class="article-title">Table内增加全选checkbox</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>解决方案：     </p>
+<p>VO里新建Transient属性Checked(Boolean)    </p>
+<p>表内添加一个column如下：  <br>
+{% codeblock lang:java %}
+<af:column id="c10" headerText="选择" width="30" align="center" noWrap="true">
+<f:facet name="header" >
+<af:selectBooleanCheckbox valueChangeListener="#{backingBean.selectAll}"
+autoSubmit="true" id="selectAll"
+label="" value=""
+</f:facet>
+<af:selectBooleanCheckbox label="选中/非选中" id="sbc1"  autoSubmit="true" immediate="true"
+value="#{row.bindings.Checked.inputValue}"/></p>
+<p _="%" endcodeblock></af:column></p>
+<p>{% codeblock lang:java %}
+pupblic void selectAll(ValueChangeEvent valueChangeEvent) {
+CIteratorBinding it = ADFUtils.findIterator(REIM_HEADER_ITER);
+ViewObject vo = it.getViewObject();</p>
+<p>if (valueChangeEvent.getNewValue() != null) {
+Boolean selectAll =
+Boolean.parseBoolean(valueChangeEvent.getNewValue().toString());
+if (!selectAll) {
+for (Row temp : vo.getAllRowsInRange()) {
+temp.setAttribute("Checked", false);
+}
+} else {
+for (Row temp …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/tablenei-zeng-jia-quan-xuan-checkbox.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/weblogicding-shi-qi-dong-cheng-xu.html"><h3 class="article-title">weblogic定时启动程序</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>有个需求是要求程序在每天晚上3点钟的时候自动调用一个Job执行。</p>
+
+<p>解决方案：定制weblogic的启动类，用来运行Job执行。</p>
+
+<p>STEP1，启动类StartupTask：
+<div>
+<blockquote>public class StartupTask implements T3StartupDef {<br />
+public String startup(String name, Hashtable args) throws Exception {</blockquote></div></p>
+
+<p>Callplsql.main(null);</p>
+
+<p>return "Callplsql Startup successful completed";<br />
+}</p>
+
+<p>public void setServices(T3ServicesDef t3ServicesDef) {<br />
+}</p>
+
+<p>}
+
+Callplsql.java(  即是JOB类，是需要被调用的，要继承TimerTask  ）中的Main方法要有：
+<div>
+<blockquote>public static void main(String[] args) {<br />
+//任务执行间隔时间，默认24小时<br />
+long PERIOD_TIME=24 …</blockquote></div></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/weblogicding-shi-qi-dong-cheng-xu.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-rang-afinputlistofvalueslovde-chu-shi-zhi-xian-shi-wei-blanker-bu-shi-mo-ren-de-vode-first-row.html"><h3 class="article-title">如何让af:inputListOfValues（LOV）的初始值显示为Blank而不是默认的VO的First Row</h3></a>
+<h6 class="subheader" title="2011-07-20T00:00:00+08:00">2011-07-20(Wednesday) 00:00
+</h6>
+
+
+<p>目前LOV控件在页面初始化时默认显示的是第一条记录，如果想让LOV初始化的时候不显示记录应该如何设置呢？</p>
+
+<p>方法一. 通过在BackingBean的构造函数里设置LOV的值为空字符串这种做法基本可以达到需求。但总感觉这种方法很别扭，走了弯路。</p>
+
+<p>本文介绍另外一种更为简单的方法。通过EL表达式实现需求。
+<pre class="brush:java">           &lt;af:inputListOfValues id="ilov1"
+                                    popupTitle="Search and Select: #{bindings.CodeType.hints.label}"
+                                    value="#{adfFacesContext.postback == false ? bindings.CodeType.nullValueString : bindings.CodeType.inputValue}"
+                                    label="#{bindings.CodeType.hints.label}"
+                                    model="#{bindings.CodeType.listOfValuesModel}"
+                                    required="#{bindings.CodeType.hints.mandatory}"
+                                    columns="#{bindings.CodeType.hints.displayWidth}"
+                                    shortDesc …</pre></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-rang-afinputlistofvalueslovde-chu-shi-zhi-xian-shi-wei-blanker-bu-shi-mo-ren-de-vode-first-row.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-rang-adfri-qi-zu-jian-xian-shi-shi-fen-miao.html"><h3 class="article-title">如何让ADF日期组件显示时分秒</h3></a>
+<h6 class="subheader" title="2011-07-15T00:00:00+08:00">2011-07-15(Friday) 00:00
+</h6>
+
+
+<p>默认的ADF的inputDate组件是不显示时分秒的，客户的需求要精确到时分秒的显示。其实只需要一个很小的改动就可以实现这个需求。</p>
+
+<p>以HR的Employee表为例</p>
+
+<p><strong>Step.1 </strong>创建Business Components from table，得到EO，VO等。</p>
+
+<p><strong>Step.2</strong> 双击Employees EO，</p>
+
+<p><strong>Step.3</strong> 找到日期属性HireDate,双击打开属性编辑页，作如下修改（<span style="color: #ff0000;">Format Type: Simple Date; Format: yyyy-MM-dd HH:mm:ss</span>), OK。</p>
+
+<p><strong>Step.4 </strong>切换到Source页，将HireDate属性的类型type="oracle.jbo.domain.Date"改为下图所示的"oracle.jbo.domain.Timestamp"类型，保存即可。<strong>
+</strong></p>
+
+<p><strong>Step.5</strong> 将Employees VO生成的DataControl拖到页面上生成一个ADF …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-rang-adfri-qi-zu-jian-xian-shi-shi-fen-miao.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/duo-yu-yan-qie-huan-gong-neng-shi-xian.html"><h3 class="article-title">多语言切换功能实现</h3></a>
+<h6 class="subheader" title="2011-07-13T00:00:00+08:00">2011-07-13(Wednesday) 00:00
+</h6>
+
+
+<p><strong>Step.1 </strong>新建测试工程<strong> Fusion Web Application(ADF)</strong>。</p>
+
+<p><strong>Step.2 </strong>创建resource Bundle 文件，如下所示，我创建了三个语言版本的文件。
+<blockquote><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">en</span>_<span style="color: #ff00ff;">US</span>.properties</blockquote></p>
+
+<p><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">zh</span>_<span style="color: #ff00ff;">CN</span>.properties</p>
+
+<p><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">ja</span>_<span style="color: #ff00ff;">JP</span>.properties
+<strong>Step.3</strong> 在faces-config.xml中注册以上三个文件。
+<blockquote>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />
+&lt;faces-config version="1.2" xmlns="http://java.sun …</blockquote></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/duo-yu-yan-qie-huan-gong-neng-shi-xian.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/adfying-yong-zhong-ru-he-zai-backingbeanzhong-diao-yong-javascriptkong-zhi-ui.html"><h3 class="article-title">ADF应用中如何在BackingBean中调用javascript控制UI</h3></a>
+<h6 class="subheader" title="2011-06-29T00:00:00+08:00">2011-06-29(Wednesday) 00:00
+</h6>
+
+
+<p>当你需要在ManagedBean中控制页面控制的属性的时候，可以使用以下代码调用javascript实现。</p>
+
+<p>&nbsp;
+<pre class="brush:java">//import org.apache.myfaces.trinidad.util.Service;
+String script="你的javascript代码";</pre></p>
+
+<p>FacesContext context = <br />
+        FacesContext.getCurrentInstance();</p>
+
+<p>ExtendedRenderKitService erks = <br />
+        (ExtendedRenderKitService)Service.<br />
+        getService(context.getRenderKit(), <br />
+        ExtendedRenderKitService.class);</p>
+
+<p>erks.addScript(context, script);
+&nbsp;</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/adfying-yong-zhong-ru-he-zai-backingbeanzhong-diao-yong-javascriptkong-zhi-ui.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+            <!-- /#posts-list -->
+<div class="pagination-centered">
+<h6 class="subheader">Page 3 of 4</h6>
+
+<p>
+            <a href="http://localhost:8000/category/adf2.html">&laquo; Prev</a>
+
+        <a href="http://localhost:8000/category/adf4.html">Next &raquo;</a>
+</p>
+</div>
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

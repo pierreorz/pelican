@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - webcenter</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/chuang-jian-content-repositoryshi-chu-xian-cuo-wu.html"><h3 class="article-title">创建Content Repository时出现错误</h3></a>
+<h6 class="subheader" title="2014-08-25T00:00:00+08:00">2014-08-25(Monday) 00:00
+</h6>
+
+
+<h4><i class="icon-file"></i><strong>创建Content Repository时出现错误：</strong></h4>
+<blockquote>
+<p><strong>NOTE:</strong></p>
+<ul>
+<li>Unable to load content server metadata model using GET_DOC_METADATA_INFO.</li>
+<li>Permission denied. Address 'XX.XX.XX.XX' is not an allowable remote socket address</li>
+</ul>
+</blockquote>
+<h4><i class="icon-file"></i> <strong>解决方法:</strong></h4>
+<blockquote>
+<ul>
+<li>
+<p><i class="icon-pencil"></i> 找到config.cfg   <br>
+<code>/u02/app/oraucm/fmw_home/user_projects/domains/ecm_domain/ucm/cs/config/config.cfg</code></p>
+</li>
+<li>
+<p><i class="icon-pencil"></i>在SocketHostAddressSecurityFilter值加上<code>|*.*.*.*</code>
+SocketHostAddressSecurityFilter=127.0.0.1|192.168.15.163|<code>*.*.*.*</code>即可</p>
+</li>
+</ul>
+</blockquote><p class="subheader">Category: <a href="http://localhost:8000/category/webcenter.html">webcenter</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/webcenter.html">webcenter </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

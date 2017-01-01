@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>定制ADF应用的CSS</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/ding-zhi-adfying-yong-de-css.html" rel="bookmark"
+        title="Permalink to 定制ADF应用的CSS">定制ADF应用的CSS</a></h3>
+    </header>
+
+<h6 class="subheader" title="2011-06-27T00:00:00+08:00">2011-06-27(Monday) 00:00
+</h6>
+
+
+    <p>客户的要求总是各种变态，如果需要定制默认的控件样式的话，那么以下的文章可能会对你有帮助。</p>
+<p>Step.1 首先我们需要定义自己的CSS文件 <span style="color: #0000ff;">CustomSkin.css</span>
+<pre class="brush:css">af|inputListOfValues::search-icon-style{
+  background-image:none;
+}</pre></p></p>
+<p>af|inputListOfValues::search-icon-style:hover{<br />
+  background-image:none;<br />
+}
+af|inputListOfValues::search-icon-style:active{<br />
+  background-image:none;<br />
+}
+af|inputListOfValues::search-icon-style:info{<br />
+  background-image:none;<br />
+}
+Step.2 接着创建 <span style="color: #0000ff;">trinidad-skins.xml</span>
+<pre class="brush:xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;skins xmlns="http://myfaces.apache.org/trinidad/skin"&gt;
+  &lt;skin&gt;
+    &lt;id&gt;customSkin.desktop&lt;/id&gt;
+    &lt;family&gt;CustomSkin&lt;/family&gt;
+    &lt;extends&gt;blafplus-rich.desktop&lt;/extends&gt;
+    &lt;render-kit-id&gt;org.apache.myfaces.trinidad.desktop&lt;/render-kit-id&gt;
+    &lt;style-sheet-name&gt;css/CustomSkin.css&lt;/style-sheet-name&gt;
+  &lt;/skin&gt;
+&lt;/skins&gt;</pre>
+Step.3 修改 <span style="color: #0000ff;">trinidad-config.xml</span>
+<pre class="brush:xml"> &lt;skin-family&gt;CustomSkin&lt;/skin-family&gt;</pre>
+Step.4 修改<span style="color: #0000ff;">web.xml</span>
+<pre class="brush:xml">&lt;context-param&gt;
+    &lt;description&gt;If this parameter is true, there will be an automatic check of the modification date of your JSPs, and saved state will be discarded when JSP's change. It will also automatically check if your skinning css files have changed without you having to restart the server. This makes development easier, but adds overhead. For this reason this parameter should be set to false when your application is deployed.&lt;/description&gt;
+    &lt;param-name&gt;org.apache.myfaces.trinidad.CHECK_FILE_MODIFICATION&lt;/param-name&gt;
+    &lt;param-value&gt;true&lt;/param-value&gt;
+  &lt;/context-param&gt;</pre></p>
+
+<p>&lt;context-param&gt;<br />
+    &lt;description&gt;No obfuscation of CSS.&lt;/description&gt;<br />
+    &lt;param-name&gt;org.apache.myfaces.trinidad.DISABLE_CONTENT_COMPRESSION&lt;/param-name&gt;<br />
+    &lt;param-value&gt;true&lt;/param-value&gt;<br />
+  &lt;/context-param&gt;
+重启下应用就会发现控件样式已经采用自定义CSS文件里的样式了！<span style="color: #0000ff;">
+</span></p>
+
+<p>&nbsp;</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

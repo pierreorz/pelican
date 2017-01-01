@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>oracle数据库用户被锁问题解决</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/oracleshu-ju-ku-yong-hu-bei-suo-wen-ti-jie-jue.html" rel="bookmark"
+        title="Permalink to oracle数据库用户被锁问题解决">oracle数据库用户被锁问题解决</a></h3>
+    </header>
+
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+    <p>运行AM的时候报个JDBC连接错误，ORA-280000:用户被锁的异常。<br />
+于是在PL/SQL DEV里切换成SYSTEM用户 alter user XXX account unlock;之后，用PL/SQL DEV测试 可以连上了<br />
+再运行AM的时候，又报了个用户被锁。很是蛋疼<br />
+于是换到命令行，尝试以SYSDBA的身份再执行一次alter account unlock;<br />
+发现连不上：报了以下错误：<br />
+ORA-28056: Writing audit records to Windows Event Log failed<br />
+这你妹的，原来是系统日志满了，解决方案：<br />
+打开windows 事件查看器，将应用程序日志清理一下，重新连接数据库，连接成功。</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

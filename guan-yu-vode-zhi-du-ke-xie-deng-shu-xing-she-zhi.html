@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>关于VO的只读可写等属性设置</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/guan-yu-vode-zhi-du-ke-xie-deng-shu-xing-she-zhi.html" rel="bookmark"
+        title="Permalink to 关于VO的只读可写等属性设置">关于VO的只读可写等属性设置</a></h3>
+    </header>
+
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+    <p>如果生成ViewObject 的时候选择的是只读的VO的话，会发现VO的source里有ReadOnly="true"。<br />
+需求1：在MB中我通过代码拿到这个VO的实例，我想通过以下代码添加Row
+<div>
+<blockquote>Row newRow=Vo.createRow();<br />
+newRow.setAttribute("attribute1","value1");<br />
+newRow.setAttribute("attribute2","value2");<br />
+newRow.setAttribute("attribute3","value3");<br />
+Vo.insertRow(newRow);</blockquote>
+</div>
+最终发现，只读VO无法插入数据。怎么办？将ReadOnly改成"false"之后测试，发现满足需求~！<br />
+需求2：满足需求1之后发现，Vo里的确插入数据了。如果页面上有保存按钮，也会将这个数据更改到数据库，而这个数据只是需要在MB中起过渡作用，不必将newRow的数据postChange到DB，怎么办？<br />
+VO里 这个属性DeleteParticipant 立功了。 DeleteParticipant就是控制数据是否保存到DB的。设置 DeleteParticipant="false"发现满足了需求！</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

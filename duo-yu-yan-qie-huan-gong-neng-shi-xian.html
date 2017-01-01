@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>多语言切换功能实现</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/duo-yu-yan-qie-huan-gong-neng-shi-xian.html" rel="bookmark"
+        title="Permalink to 多语言切换功能实现">多语言切换功能实现</a></h3>
+    </header>
+
+<h6 class="subheader" title="2011-07-13T00:00:00+08:00">2011-07-13(Wednesday) 00:00
+</h6>
+
+
+    <p><strong>Step.1 </strong>新建测试工程<strong> Fusion Web Application(ADF)</strong>。</p>
+
+<p><strong>Step.2 </strong>创建resource Bundle 文件，如下所示，我创建了三个语言版本的文件。
+<blockquote><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">en</span>_<span style="color: #ff00ff;">US</span>.properties</blockquote></p>
+
+<p><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">zh</span>_<span style="color: #ff00ff;">CN</span>.properties</p>
+
+<p><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">ja</span>_<span style="color: #ff00ff;">JP</span>.properties
+<strong>Step.3</strong> 在faces-config.xml中注册以上三个文件。
+<blockquote>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />
+&lt;faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"&gt;<br />
+&lt;application&gt;<br />
+&lt;default-render-kit-id&gt;oracle.adf.rich&lt;/default-render-kit-id&gt;
+<span style="color: #ff00ff;">&lt;resource-bundle&gt;</span>
+<span style="color: #ff00ff;"> &lt;base-name&gt;ScreenConfig&lt;/base-name&gt;</span>
+<span style="color: #ff00ff;"> &lt;var&gt;screen&lt;/var&gt;</span>
+<span style="color: #ff00ff;"> &lt;/resource-bundle&gt;</span>
+<span style="color: #ff00ff;"> &lt;locale-config&gt;</span>
+<span style="color: #ff00ff;"> &lt;default-locale&gt;zh_CN&lt;/default-locale&gt;</span>
+<span style="color: #ff00ff;"> &lt;supported-locale&gt;en_US&lt;/supported-locale&gt;</span>
+<span style="color: #ff00ff;"> &lt;supported-locale&gt;ja_JP&lt;/supported-locale&gt;</span>
+<span style="color: #ff00ff;"> &lt;/locale-config&gt;</span>
+&lt;/application&gt;<br />
+&lt;/faces-config&gt;</blockquote>
+<strong>Step.4</strong> 新建一个测试页面
+<blockquote>&lt;?xml version='1.0' encoding='UTF-8'?&gt;<br />
+&lt;jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"<br />
+xmlns:f="http://java.sun.com/jsf/core"<br />
+xmlns:h="http://java.sun.com/jsf/html"<br />
+xmlns:af="http://xmlns.oracle.com/adf/faces/rich"&gt;<br />
+&lt;jsp:directive.page contentType="text/html;charset=UTF-8"/&gt;<br />
+&lt;f:view &gt;<br />
+&lt;af:document id="d1"&gt;
+<span style="color: #ff00ff;">&lt;f:loadBundle basename="ScreenConfig" var="screen"   /&gt;</span>
+&lt;af:form id="f1"&gt;<br />
+&lt;af:inputText label="<span style="color: #ff00ff;">#{screen.test}</span>" id="it1"/&gt;<br />
+&lt;af:commandButton text="<span style="color: #ff00ff;">#{screen.command}</span>" id="en"  partialTriggers="en"<br />
+action="<span style="color: #ff00ff;">#{BackingBean.changeLang}"</span>/&gt;<br />
+&lt;/af:form&gt;<br />
+&lt;/af:document&gt;<br />
+&lt;/f:view&gt;<br />
+&lt;!--oracle-jdev-comment:preferred-managed-bean-name:BackingBean--&gt;<br />
+&lt;/jsp:root&gt;</blockquote>
+<strong>Step.5</strong> 生成的BackingBean中内容如下：
+<blockquote>package view;</blockquote></p>
+
+<p>import java.util.Locale;<br />
+import java.util.ResourceBundle;</p>
+
+<p>import javax.faces.context.FacesContext;</p>
+
+<p>import javax.servlet.http.HttpServletRequest;<br />
+import javax.servlet.http.HttpSession;</p>
+
+<p>public class BackingBean {<br />
+public BackingBean() {<br />
+}
+private Locale locale;</p>
+
+<p>public String changeLang() {</p>
+
+<p>FacesContext facesContext = FacesContext.getCurrentInstance();<br />
+HttpServletRequest request =<br />
+(HttpServletRequest)facesContext.getExternalContext().getRequest();<br />
+String flag =<br />
+request.getSession().getAttribute("flag") == null ? "ZH" :<br />
+request.getSession().getAttribute("flag").toString();</p>
+
+<p>if ("ZH".equals(flag)) {<br />
+flag = "EN";<br />
+this.setLocale(new Locale("zh", "CN"));<br />
+} else if ("EN".equals(flag)) {<br />
+flag = "JA";<br />
+this.setLocale(new Locale("en", "US"));<br />
+} else if ("JA".equals(flag)) {<br />
+flag = "ZH";<br />
+this.setLocale(new Locale("ja", "JP"));<br />
+}
+request.getSession().setAttribute("flag", flag);<br />
+facesContext.getViewRoot().setLocale(locale);<br />
+return null;<br />
+}</p>
+
+<p>public void setLocale(Locale locale) {<br />
+this.locale = locale;<br />
+}</p>
+
+<p>public Locale getLocale() {<br />
+return locale;<br />
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

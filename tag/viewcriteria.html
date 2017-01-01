@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - ViewCriteria</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/adfxue-xi-zong-jie-yi.html"><h3 class="article-title">"ADF学习总结(一)"</h3></a>
+<h6 class="subheader" title="2013-04-19T00:00:00+08:00">2013-04-19(Friday) 00:00
+</h6>
+
+
+<h4>改变VO查询条件</h4>
+<ul>
+<li>使用WhereClause改变查询条件</li>
+<li>使用Criteria改变查询条件</li>
+<li>使用Bind Variables改变查询条件</li>
+</ul>
+<h4>使用WhereClause改变查询条件</h4>
+<ul>
+<li><strong>setWhereClause</strong>    </li>
+</ul>
+<p _="%" endcodeblock>通过VO对象的setWhereClause方法改变查询条件
+{% codeblock lang:java %}
+DCIteratorBinding dc = ADFUtils.findIterator("DepartmentsView1Iterator");  <br>
+ViewObject vo = dc.getViewObject();     <br>
+vo.setWhereClause(" 1=1 ");  <br>
+vo.executeQuery();   <br></p>
+<ul>
+<li><strong>addWhereClause</strong></li>
+</ul>
+<p>addWhereClause是在原有whereClause基础上添加新的查询条件；  <br>
+跟setWhereClause替换原有whereClaue不同；</p>
+<h4>使用ViewCriteria改变查询条件</h4>
+<ul>
+<li><strong>使用定义好的ViewCriteria</strong>    </li>
+</ul>
+<p>事先在创建VO的时候，定义好几种Criteria：DepartmentsViewCriteria    </p>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+DCIteratorBinding dc = ADFUtils.findIterator("DepartmentsView1Iterator");      <br>
+ViewObject vo = dc.getViewObject();         <br>
+ViewCriteriaManager vcm=vo.getViewCriteriaManager();  <br>
+vo.applyViewCriteria(vcm.getViewCriteria("DepartmentsViewCriteria"));   <br>
+vo.executeQuery();   <br></p>
+<ul>
+<li><strong>动态创建ViewCriteria</strong>    </li>
+</ul>
+<p>如果事先没有在VO中定义好ViewCriteria，也可以在MB代码中动态创建    </p>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+DCIteratorBinding dc = ADFUtils.findIterator("DepartmentsView1Iterator");  <br>
+ViewObject vo = dc.getViewObject();  <br>
+ViewCriteria vc = vo.createViewCriteria();  <br>
+ViewCriteriaRow vcr = vc.createViewCriteriaRow();  <br>
+vcr.setConjunction(ViewCriteriaRow.VC_CONJ_AND);  <br>
+vcr.setAttribute("DepartmentId", "20");  <br>
+vc.add(vcr);  <br>
+vo.applyViewCriteria(vc);  <br>
+vo.executeQuery();      <br></p>
+<h4>使用Bind Variables改变查询条件</h4>
+<ul>
+<li><strong>使用Bind Variables结合ViewCriteria</strong></li>
+</ul>
+<p>参照以上定义ViewCriteria时，使用Bind Variables。    </p>
+<ul>
+<li><strong>使用Bind Variables结合SQL</strong></li>
+</ul>
+<p>在VO的SQL中使用Bind Variables；    </p>
+<p _="%" endcodeblock>{% codeblock lang:sql %}
+SELECT Departments.DEPARTMENT_ID, 
+       Departments.DEPARTMENT_NAME, 
+       Departments.MANAGER_ID, 
+       Departments.LOCATION_ID
+FROM DEPARTMENTS Departments
+WHERE Departments.DEPARTMENT_ID = :varDeptId</p>
+<p>创建Bind Variables：varDeptId    </p>
+<p>在查询VO时，通过如下代码控制即可实现：    </p>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+DCIteratorBinding dc = ADFUtils.findIterator("DepartmentsView1Iterator");  <br>
+ViewObject vo = dc.getViewObject();  <br>
+ViewCriteria vc = vo.createViewCriteria();  <br>
+vo.setNamedWhereClauseParam("varDeptId", 20);  <br>
+vo.executeQuery();        <br></p>
+<p>以上几种方法均可实现改变VO查询条件进行动态查询，各有灵活度，目前没有比较三种方式带来的性能影响，可以根据个人习惯采用。</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/viewcriteria.html">ViewCriteria </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - pierreorz</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+
+            <article>
+                <a href="http://localhost:8000/weblogicding-shi-qi-dong-cheng-xu.html"><h3 class="article-title">weblogic定时启动程序</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>有个需求是要求程序在每天晚上3点钟的时候自动调用一个Job执行。</p>
+
+<p>解决方案：定制weblogic的启动类，用来运行Job执行。</p>
+
+<p>STEP1，启动类StartupTask：
+<div>
+<blockquote>public class StartupTask implements T3StartupDef {<br />
+public String startup(String name, Hashtable args) throws Exception {</blockquote></div></p>
+
+<p>Callplsql.main(null);</p>
+
+<p>return "Callplsql Startup successful completed";<br />
+}</p>
+
+<p>public void setServices(T3ServicesDef t3ServicesDef) {<br />
+}</p>
+
+<p>}
+
+Callplsql.java(  即是JOB类，是需要被调用的，要继承TimerTask  ）中的Main方法要有：
+<div>
+<blockquote>public static void main(String[] args) {<br />
+//任务执行间隔时间，默认24小时<br />
+long PERIOD_TIME=24 …</blockquote></div></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/weblogicding-shi-qi-dong-cheng-xu.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ying-pan-an-zhuang-fedora.html"><h3 class="article-title">硬盘安装fedora</h3></a>
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+<p>下载好fedora16 ISO镜像文件放在C盘，解压出来images文件，及vmlinuz,initrd.img文件。使用grub引导硬盘安装，分区时报错：<br />
+you have not created a bootloader stage1 target device</p>
+
+<p>This can happen if there is not enough space on your hard drive(s) for the installation.</p>
+
+<p>解决方案：引导参数加上linux askmethod，选择正确的镜像路径sda1即可。</p>
+
+<p>grub&gt;root (hd0,0)<br />
+grub&gt;kernel (hd0,0)/vmlinuz <span style="color: red;">linux askmethod</span> (之前没有加此参数 …</p><p class="subheader">Category: <a href="http://localhost:8000/category/linux.html">linux</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/fedora.html">fedora </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ying-pan-an-zhuang-fedora.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-rang-afinputlistofvalueslovde-chu-shi-zhi-xian-shi-wei-blanker-bu-shi-mo-ren-de-vode-first-row.html"><h3 class="article-title">如何让af:inputListOfValues（LOV）的初始值显示为Blank而不是默认的VO的First Row</h3></a>
+<h6 class="subheader" title="2011-07-20T00:00:00+08:00">2011-07-20(Wednesday) 00:00
+</h6>
+
+
+<p>目前LOV控件在页面初始化时默认显示的是第一条记录，如果想让LOV初始化的时候不显示记录应该如何设置呢？</p>
+
+<p>方法一. 通过在BackingBean的构造函数里设置LOV的值为空字符串这种做法基本可以达到需求。但总感觉这种方法很别扭，走了弯路。</p>
+
+<p>本文介绍另外一种更为简单的方法。通过EL表达式实现需求。
+<pre class="brush:java">           &lt;af:inputListOfValues id="ilov1"
+                                    popupTitle="Search and Select: #{bindings.CodeType.hints.label}"
+                                    value="#{adfFacesContext.postback == false ? bindings.CodeType.nullValueString : bindings.CodeType.inputValue}"
+                                    label="#{bindings.CodeType.hints.label}"
+                                    model="#{bindings.CodeType.listOfValuesModel}"
+                                    required="#{bindings.CodeType.hints.mandatory}"
+                                    columns="#{bindings.CodeType.hints.displayWidth}"
+                                    shortDesc …</pre></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-rang-afinputlistofvalueslovde-chu-shi-zhi-xian-shi-wei-blanker-bu-shi-mo-ren-de-vode-first-row.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/oracle-11g-shu-ju-ku-an-zhuang-hou-gai-ji-suan-ji-ming-chu-xian-wu-fa-lian-jie-de-wen-ti-jie-jue.html"><h3 class="article-title">oracle 11g 数据库安装后改计算机名出现无法连接的问题解决</h3></a>
+<h6 class="subheader" title="2011-07-15T00:00:00+08:00">2011-07-15(Friday) 00:00
+</h6>
+
+
+<p>在局域网内一台机器上安装完oracle11g之后，本地测试OK 可以访问orcl。用局域网内另一台机器连接的时候不行。<br />
+两台机器可以PING通。<br />
+修改tnsname.ora  把默认的localhost 都改成了本机IP 试试还是不行。<br />
+然后改了下计算机名，各种测试，打开EM还是只看到实例正常，监听程序为状态为不可用，实例的代理连接状态为不可用。<br />
+很是蛋疼，手贱不应该改计算机名啊。。。<br />
+想想多有可能要改的都改好了。。。怎么还是连不上？<br />
+是不是刚改好的还没有生效？<br />
+lsnrctl stop<br />
+lsnrctl start<br />
+各种重启服务之后，终于见到了全绿~~~</p><p class="subheader">Category: <a href="http://localhost:8000/category/oracle.html">oracle</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/oracle.html">oracle </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/oracle-11g-shu-ju-ku-an-zhuang-hou-gai-ji-suan-ji-ming-chu-xian-wu-fa-lian-jie-de-wen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-rang-adfri-qi-zu-jian-xian-shi-shi-fen-miao.html"><h3 class="article-title">如何让ADF日期组件显示时分秒</h3></a>
+<h6 class="subheader" title="2011-07-15T00:00:00+08:00">2011-07-15(Friday) 00:00
+</h6>
+
+
+<p>默认的ADF的inputDate组件是不显示时分秒的，客户的需求要精确到时分秒的显示。其实只需要一个很小的改动就可以实现这个需求。</p>
+
+<p>以HR的Employee表为例</p>
+
+<p><strong>Step.1 </strong>创建Business Components from table，得到EO，VO等。</p>
+
+<p><strong>Step.2</strong> 双击Employees EO，</p>
+
+<p><strong>Step.3</strong> 找到日期属性HireDate,双击打开属性编辑页，作如下修改（<span style="color: #ff0000;">Format Type: Simple Date; Format: yyyy-MM-dd HH:mm:ss</span>), OK。</p>
+
+<p><strong>Step.4 </strong>切换到Source页，将HireDate属性的类型type="oracle.jbo.domain.Date"改为下图所示的"oracle.jbo.domain.Timestamp"类型，保存即可。<strong>
+</strong></p>
+
+<p><strong>Step.5</strong> 将Employees VO生成的DataControl拖到页面上生成一个ADF …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-rang-adfri-qi-zu-jian-xian-shi-shi-fen-miao.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/duo-yu-yan-qie-huan-gong-neng-shi-xian.html"><h3 class="article-title">多语言切换功能实现</h3></a>
+<h6 class="subheader" title="2011-07-13T00:00:00+08:00">2011-07-13(Wednesday) 00:00
+</h6>
+
+
+<p><strong>Step.1 </strong>新建测试工程<strong> Fusion Web Application(ADF)</strong>。</p>
+
+<p><strong>Step.2 </strong>创建resource Bundle 文件，如下所示，我创建了三个语言版本的文件。
+<blockquote><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">en</span>_<span style="color: #ff00ff;">US</span>.properties</blockquote></p>
+
+<p><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">zh</span>_<span style="color: #ff00ff;">CN</span>.properties</p>
+
+<p><span style="color: #ff0000;">ScreenConfig</span>_<span style="color: #0000ff;">ja</span>_<span style="color: #ff00ff;">JP</span>.properties
+<strong>Step.3</strong> 在faces-config.xml中注册以上三个文件。
+<blockquote>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />
+&lt;faces-config version="1.2" xmlns="http://java.sun …</blockquote></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/duo-yu-yan-qie-huan-gong-neng-shi-xian.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/adfying-yong-zhong-ru-he-zai-backingbeanzhong-diao-yong-javascriptkong-zhi-ui.html"><h3 class="article-title">ADF应用中如何在BackingBean中调用javascript控制UI</h3></a>
+<h6 class="subheader" title="2011-06-29T00:00:00+08:00">2011-06-29(Wednesday) 00:00
+</h6>
+
+
+<p>当你需要在ManagedBean中控制页面控制的属性的时候，可以使用以下代码调用javascript实现。</p>
+
+<p>&nbsp;
+<pre class="brush:java">//import org.apache.myfaces.trinidad.util.Service;
+String script="你的javascript代码";</pre></p>
+
+<p>FacesContext context = <br />
+        FacesContext.getCurrentInstance();</p>
+
+<p>ExtendedRenderKitService erks = <br />
+        (ExtendedRenderKitService)Service.<br />
+        getService(context.getRenderKit(), <br />
+        ExtendedRenderKitService.class);</p>
+
+<p>erks.addScript(context, script);
+&nbsp;</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/adfying-yong-zhong-ru-he-zai-backingbeanzhong-diao-yong-javascriptkong-zhi-ui.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/javaxelpropertynotfoundexceptioncuo-wu-jie-jue.html"><h3 class="article-title">javax.el.PropertyNotFoundException错误解决</h3></a>
+<h6 class="subheader" title="2011-06-29T00:00:00+08:00">2011-06-29(Wednesday) 00:00
+</h6>
+
+
+<p>有时候明明没有什么错误，一样的代码在别人机器上跑没问题，自己机器上跑却会出现以下这样的错误：
+<pre class="brush:java">javax.el.PropertyNotFoundException: Target Unreachable, identifier 'bindings' resolved to null</pre>
+这样的错误会随着代码量的增加而越发频繁，是IDE的缓存的BUG，如果重启jdeveloper 还不能解决的话，把报错的那个bindings的pagedef文件改动下（加一行空格）保存，然后clean all，再重新build下，基本能够解决这个问题。</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/javaxelpropertynotfoundexceptioncuo-wu-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/adfying-yong-remote-deployment-failedcuo-wu-jie-jue.html"><h3 class="article-title">ADF应用“Remote deployment failed”错误解决</h3></a>
+<h6 class="subheader" title="2011-06-28T00:00:00+08:00">2011-06-28(Tuesday) 00:00
+</h6>
+
+
+<p>ADF应用debug模式下最常出现的问题就是远程发布失败了。控制台打印的错误信息如下：
+<pre class="brush:plain">[07:21:55 PM] ####  Deployment incomplete.  ####
+[07:21:55 PM] Remote deployment failed (oracle.jdevimpl.deploy.common.Jsr88RemoteDeployer)
+#### Cannot run application XXX due to error deploying to IntegratedWebLogicServer.
+[Application XXX stopped and undeployed from Server Instance IntegratedWebLogicServer]
+&lt;Logger&gt;&lt;error&gt; ServletContainerAdapter manager not initialized correctly.</pre>
+解决方法有两种：</p>
+
+<p>方法一：进入weblogic控制台<span style="color: #0000ff;">http …</span></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/adfying-yong-remote-deployment-failedcuo-wu-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ding-zhi-adfying-yong-de-css.html"><h3 class="article-title">定制ADF应用的CSS</h3></a>
+<h6 class="subheader" title="2011-06-27T00:00:00+08:00">2011-06-27(Monday) 00:00
+</h6>
+
+
+<p>客户的要求总是各种变态，如果需要定制默认的控件样式的话，那么以下的文章可能会对你有帮助。</p>
+<p>Step.1 首先我们需要定义自己的CSS文件 <span style="color: #0000ff;">CustomSkin.css</span>
+<pre class="brush:css">af|inputListOfValues::search-icon-style{
+  background-image:none;
+}</pre></p></p>
+<p>af|inputListOfValues::search-icon-style:hover{<br />
+  background-image:none;<br />
+}
+af|inputListOfValues::search-icon-style:active{<br />
+  background-image:none;<br />
+}
+af|inputListOfValues::search-icon-style:info{<br />
+  background-image:none;<br />
+}
+Step.2 接着创建 <span style="color: #0000ff;">trinidad-skins.xml</span>
+<pre class="brush:xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;skins xmlns="http://myfaces.apache.org/trinidad/skin …</pre></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ding-zhi-adfying-yong-de-css.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+            <!-- /#posts-list -->
+<div class="pagination-centered">
+<h6 class="subheader">Page 7 of 8</h6>
+
+<p>
+            <a href="http://localhost:8000/author/pierreorz6.html">&laquo; Prev</a>
+
+        <a href="http://localhost:8000/author/pierreorz8.html">Next &raquo;</a>
+</p>
+</div>
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

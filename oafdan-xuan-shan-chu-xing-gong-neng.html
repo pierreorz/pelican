@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>"OAF单选删除行功能"</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/oafdan-xuan-shan-chu-xing-gong-neng.html" rel="bookmark"
+        title="Permalink to "OAF单选删除行功能"">"OAF单选删除行功能"</a></h3>
+    </header>
+
+<h6 class="subheader" title="2013-03-20T00:00:00+08:00">2013-03-20(Wednesday) 00:00
+</h6>
+
+
+    <hr>
+<p>平台：Jdeveloper 9i    </p>
+<hr>
+<p><strong>一般实现步骤：</strong></p>
+<ol>
+<li>在VO中添加新transient属性selector，updatable设置为always。    </li>
+<li>在PG中给table添加singleSelection方法，并绑定view Instance为VO的instance，View Attribute为刚刚新建的transient属性seletor。        </li>
+<li>这样当用户勾选checkbox时，会给transient属性变量赋值为Y，因此，在删除逻辑中循环判断VO中的transient属性，当其为Y时执行remove该行即可实现选择删除功能。  <br>
+<strong>相关代码如下：</strong></li>
+</ol>
+<p><strong>CO中processFormRequest里添加代码如下：</strong></p>
+<p>{% codeblock lang:java %}
+    //当单击deleteBtn按钮时执行AM中的deleteAutoSequenceVO方法  <br>
+    if (pageContext.getParameter("deleteBtn")!=null)
+    {
+      am.invokeMethod("deleteAutoSequenceVO");</p>
+<div class="highlight"><pre><span></span>}
+</pre></div>
+
+
+<p>{% endcodeblock %}</p>
+<p><strong>AM中代码如下：</strong></p>
+<p>{% codeblock lang:java %}
+    public void deleteAutoSequenceVO() {
+        OAViewObject vo = this.getChAutoSequenceVO1();
+        RowSetIterator iter = vo.createRowSetIterator("delete");
+        if (vo != null) {
+            int num = vo.getRowCount();
+            for (int i = 0; i &lt; num; i++) {
+                Row temp = iter.next();
+                if ("Y".equals(temp.getAttribute("selector"))) {
+                    vo.setCurrentRow(temp);
+                    vo.removeCurrentRow();
+                    break;
+                }
+            }
+        }
+        iter.closeRowSetIterator();
+        throw new OAException("删除成功,请点击[保存]按钮生效到数据库.",  <br>
+                              OAException.INFORMATION);
+    }</p>
+<p>{% endcodeblock %}</p>
+<p>但是在实际开发中，出现一个很诡异的现象，其它页面单选删除功能都正常，某一页面单选之后却无法赋值Y给VO中的transient变量，推测可能是VO用的是复合主键或者其它框架BUG导致，无奈给单选再添加手工赋值功能。    </p>
+<p>选择单选控件，将其Client Action中的Action Type设置为firePartialAction Submit设置为false。准备在用户单选时调用自定义方法，给变量赋值。</p>
+<p><strong>CO中processFormRequest里添加如下方法</strong>
+{% codeblock lang:java %}
+        if ("update".equals(pageContext.getParameter(OAWebBeanConstants.EVENT_PARAM))) {
+            String rowRef =
+                pageContext.getParameter(OAWebBeanConstants.EVENT_SOURCE_ROW_REFERENCE);
+            Row currentRow = am.findRowByRef(rowRef);
+            currentRow.setAttribute("selector", "Y");
+        }</p>
+<p>{% endcodeblock %}</p>
+<p>这样便实现了单选删除功能。</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/ebs.html">ebs</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/oaf.html">oaf </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>OAF个性化Button获取页面参数</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/oafge-xing-hua-buttonhuo-qu-ye-mian-can-shu.html" rel="bookmark"
+        title="Permalink to OAF个性化Button获取页面参数">OAF个性化Button获取页面参数</a></h3>
+    </header>
+
+<h6 class="subheader" title="2014-06-03T00:00:00+08:00">2014-06-03(Tuesday) 00:00
+</h6>
+
+
+    <ul>
+<li>平台: R12    </li>
+<li>需求: 需要个性化一个button的Destination URI属性，并添附上一个参数。</li>
+</ul>
+<p>实现方法：</p>
+<ol>
+<li>
+<p>本来重写CO便很容易实现该需求，但是涉及到修改代码以及各个环境更新就很麻烦了，所以如果个性化button的URL是最方便了。</p>
+</li>
+<li>
+<p>个性化又涉及到如何在URL里传递参数的问题。  </p>
+</li>
+</ol>
+<p>右键当前页面，查看源代码如下：      </p>
+<div class="highlight"><pre><span></span>&lt;form id=&quot;DefaultFormName&quot; name=&quot;DefaultFormName&quot; style=&quot;margin:0px&quot; method=&quot;POST&quot;          action=&quot;/OA_HTML/OA.jsp?page=/oracle/apps/pa/deliverable/webui/CrUpDeliverablePG&amp;paCallingPage=DLVLIST&amp;paCallingMode=VIEW&amp;paProjectId=106691&amp;paDeliverableId=113287&amp;paDlvrItemId=106962&amp;&amp;addBreadCrumb=RP&amp;_ti=1696581738&amp;PersonalizationParam=PersonalizationParamAdmin&amp;retainAM=Y&amp;oapc=28&quot;&gt;
+</pre></div>
+
+
+<p>需要将当前页面中form标签的action属性中的paDlvrItemId参数的值获取过来。拼接成形如:http://dengdezhao.cn?erpid={:paDlvrItemId}形式的URL赋给button的destinationURI属性。</p>
+<ol>
+<li>
+<p>使用{@itemName}这种方式只能在table控件中才行，在此处不适用。因此考虑使用JS查找当前页面获取到参数然后拼接形成URL。</p>
+<div class="highlight"><pre><span></span>http://192.168.15.141/login/LoginSSO.jsp?flowCode=AM02&amp;erpid=&#39;+unescape(document.DefaultFormName.action.match(new RegExp(&quot;(^|&amp;)&quot; + &#39;paDlvrItemId&#39; + &quot;=([^&amp;]*)(&amp;|$)&quot;, &quot;i&quot;))[2])+&#39;&amp;workcode=&#39; + document.getElementById(&#39;AdditionalInfo&#39;).rows[4].cells[1].innerText + &#39;
+</pre></div>
+
+
+</li>
+<li>
+<p>将以上URL个性化赋值给button即可满足需求。</p>
+</li>
+</ol>
+<p class="subheader">Category: <a href="http://localhost:8000/category/ebs.html">ebs</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/oaf.html">oaf </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

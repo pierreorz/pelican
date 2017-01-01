@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - wordpress</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/qian-yi-wordpressbo-ke-zhi-octopress.html"><h3 class="article-title">迁移WordPress博客至Octopress</h3></a>
+<h6 class="subheader" title="2013-03-19T00:00:00+08:00">2013-03-19(Tuesday) 00:00
+</h6>
+
+
+<h4>安装GIT</h4>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+yum -y install git</p>
+<h4>安装RVM需要的包</h4>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+sudo yum install bash curl patch</p>
+<h4>安装RVM</h4>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+curl -L https://get.rvm.io | bash -s stable --ruby</p>
+<h4>安装Ruby需要的包</h4>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+sudo yum install gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison iconv-devel java</p>
+<h4>安装Ruby 1.9.3</h4>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+rvm install 1.9.3
+rvm use 1.9.3
+rvm rubygems latest</p>
+<h4>下载octopress</h4>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+git clone git://github.com/imathis/octopress.git dengdezhao
+cd dengdezhao
+ruby --version  <em>#应该显示1.9.3</em>
+gem install bundler
+bundle install
+rake install</p>
+<h4>出现Warning:Insecure world writable dir</h4>
+<p _="%" endcodeblock>这个一般是由于权限的问题，我出现这个问题是因为是用ROOT安装的RVM，然后用其它用户访问，为了方便我直接把/usr/local目录权限设置为777，然后就弹出这个警告了，/usr/local目录很重要，不允许非owner访问，所以设置为755即可解决该问题。
+{% codeblock lang:java %}
+sudo chmod -R 755 /usr/local</p>
+<h4>将Wordpress数据导出为XML文件</h4>
+<p>进入Wordpress后台，将全站数据保存为XML文件，放在Octopress根目录下</p>
+<h4>下载迁移工具</h4>
+<p _="%" endcodeblock>https://gist.github.com/chitsaou/1394128  <br>
+下载<strong>wordpressdotcom.rb</strong>放到Utils目录中，执行命令
+{% codeblock lang:java %}
+ruby -r "./utils/wordpressdotcom.rb" -e "Jekyll::WordpressDotCom.process"</p>
+<p>运行出错，需要安装hpricot</p>
+<p>{% codeblock lang:java %}
+gem install hpricot
+{% endcodeblock %}
+安装成功之后再执行上面的迁移命令，即可把wordpress中的文章导入到octopress的source/_posts中了</p>
+<h4>修改文章图片链接</h4>
+<p>迁移过来的文章中图片链接可能不大对，需要修改才能让图片显示正常，把原来wp-contents目录下uploads文件夹拷到相应路径下，替换掉文件中的静态地址为图片地址即可避免点击图片时出现404错误。  </p>
+<h4>修改页面名字及新增[标签云]&amp;[关于]页面</h4>
+<p>修改navigation.html
+{% codeblock lang:java %}
+vi source/_includes/custom/navigation.html 
+{% endcodeblock %}
+给各页面修改个性化名字，并新增两个页面</p>
+<div class="highlight"><pre><span></span>    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;main-navigation&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">root_url</span> <span class="cp">}}</span><span class="s">/&quot;</span><span class="nt">&gt;</span>博客主页<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">root_url</span> <span class="cp">}}</span><span class="s">/blog/archives&quot;</span><span class="nt">&gt;</span>文章列表<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">root_url</span> <span class="cp">}}</span><span class="s">/tag&quot;</span><span class="nt">&gt;</span>标签云<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">root_url</span> <span class="cp">}}</span><span class="s">/about&quot;</span><span class="nt">&gt;</span>关于<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+</pre></div>
+
+
+<p>创建tag&amp;about页
+{% codeblock lang:ruby %}
+rake new_page[tag]
+rake new_page[about]
+{% endcodeblock %}
+编辑页面内容，并下载配置标签云插件
+{% codeblock lang:ruby %}
+git clone https://github.com/robbyedwards/octopress-tag-pages.git
+git clone https://github.com/robbyedwards/octopress-tag-cloud.git
+{% endcodeblock %}
+将下载的文件拷贝至相应目录，并在_config.yml中增加一行    <code>tag_dir: tags</code></p>
+<h4>生成静态页面及预览</h4>
+<p>以上操作完成之后，执行<code>rake generate</code>命令生成静态页面，然后<code>rake preview</code>，在浏览器中输入http://localhost:4000即可预览站点。</p><p class="subheader">Category: <a href="http://localhost:8000/category/octopress.html">octopress</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/wordpress.html">wordpress </a>
+    <a href="http://localhost:8000/tag/octopress.html">octopress </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

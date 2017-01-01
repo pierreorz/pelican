@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - LOV</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/dong-tai-gai-bian-lovde-zhi-ji.html"><h3 class="article-title">动态改变LOV的值集</h3></a>
+<h6 class="subheader" title="2014-09-17T00:00:00+08:00">2014-09-17(Wednesday) 00:00
+</h6>
+
+
+<h4><i class="icon-file"></i>   需求：</h4>
+<p>LOV的值集需要根据传入的用户角色类型(A,B,C)动态改变，A时查询所有，B时过滤字段1，C时过滤字段2.</p>
+<p><strong>基础VO的SQL如下:</strong>
+    SELECT DISTINCT U.USER_ID, U.USER_NAME, F.FULL_NAME AS DESCRIPTION
+    FROM FND_USER U, PO_HEADERS_ALL P, PO_VENDORS V, PER_PEOPLE_F F
+    WHERE U.EMPLOYEE_ID = P.AGENT_ID
+    AND P.VENDOR_ID = V.VENDOR_ID
+    AND F.PERSON_ID(+) = U.EMPLOYEE_ID
+    AND P.APPROVED_FLAG = 'Y'
+    AND ((P.VENDOR_ID = :VARVENDORID AND :VARUSERTYPE = 'B') OR
+        (:VARUSERTYPE = 'A') OR
+        (:VARUSERTYPE = 'C' AND U.USER_ID = :VARUSERID))
+创建VARUSERTYPE VARUSERID VARVENDORID 三个绑定变量。</p>
+<h4><i class="icon-folder-open"></i> 创建LOV VO</h4>
+<p><strong>LVO的SQL如下:</strong>
+    SELECT NULL         AS USER_ID,
+        NULL         AS USER_NAME,
+        NULL         AS DESCRIPTION,
+        :VARTYPE     AS USERTYPE,<br>
+        :VARVENDORID AS VENDORID,
+        :VARUSERID   AS CURRENTUSERID
+    FROM DUAL
+技巧在这里，LVO同样创建三个绑定变量，并把绑定变量作为VO的attribute暴露出来，然后通过view Accessors传递给基础VO</p>
+<h4><i class="icon-pencil"></i> 设置View Accessors</h4>
+<ul>
+<li>
+<p>创建LOV    </p>
+</li>
+<li>
+<p>设置View Accessors    </p>
+</li>
+</ul>
+<p>这样就可以实现动态切换LOV的基础数据源了。</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/lov.html">LOV </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

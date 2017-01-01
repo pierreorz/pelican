@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>"配置OAF开发环境"</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/pei-zhi-oafkai-fa-huan-jing.html" rel="bookmark"
+        title="Permalink to "配置OAF开发环境"">"配置OAF开发环境"</a></h3>
+    </header>
+
+<h6 class="subheader" title="2013-04-17T00:00:00+08:00">2013-04-17(Wednesday) 00:00
+</h6>
+
+
+    <h4>查看EBS系统OA版本信息</h4>
+<p>方法一：使用OPERATIONS用户登陆EBS系统，选择“Diagnostics”后，在页下脚选择“About this Page”后选择“Technology Components”标签可查看相应版本信息。</p>
+<p _="%" endcodeblock>方法二：访问URI：<em>R12不可用</em>  <br>
+{% codeblock lang:java %}
+http://<HOST>:<PORT>/OA_HTML/OAInfo.jsp  <br></p>
+<h4>查看OAF版本下载相应JDEV开发工具</h4>
+<p>metalink document id: 787209.1 &amp; 416708.1</p>
+<p>例如：p4141787_11i_GENERIC.zip</p>
+<p>解压缩后把“/jdevhome/jdev”路径加到系统变量中，变量名：      JDEV_USER_HOME=F:\p4141787_11i_GENERIC\jdevhome\jdev</p>
+<h4>配置DBC文件</h4>
+<p>确认当前EBS系统使用的dbc文件.</p>
+<p _="%" endcodeblock>连接EBS数据库，执行以下SQL查询：
+{% codeblock lang:sql %}
+select host_name||'_'||instance_name from v$instance;</p>
+<p _="%" endcodeblock>telnet到EBS系统，查找dbc文件的的位置并拷贝下来放在jdevhome\jdev\dbc_files\secure目录下:  <br>
+{% codeblock lang:java %}
+ls –a|$FND_SECURE/*.dbc</p>
+<p _="%" endcodeblock>检验DBC文件是否EBS系统正在使用的DBC可用以下命令：  <br>
+{% codeblock lang:java %}
+java oracle.apps.fnd.security.AdminAppServer apps/apps STATUS DBC=/u01/dev/devappl/fnd/11.5.0/secure/SIT.dbc</p>
+<p>确认系统是否使用这个dbc文件可以在路径
+$APPL_TOP/admin/[SID]_[host].xml
+查找_dbc_file_name，跟上面说的dbc文件一致即可</p>
+<h4>配置JDEV工程属性</h4>
+<p>以上准备工作都完成之后，配置JDEV的Preferences中编码为UTF-8    </p>
+<p>配置project setting中编译器编码    </p>
+<p>然后配置DBC文件路径，测试EBS账户名及密码，所属职责等.</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/ebs.html">ebs</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/oaf.html">oaf </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

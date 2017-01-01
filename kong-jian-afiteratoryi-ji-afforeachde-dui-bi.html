@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>"控件af:iterator以及af:forEach的对比"</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/kong-jian-afiteratoryi-ji-afforeachde-dui-bi.html" rel="bookmark"
+        title="Permalink to "控件af:iterator以及af:forEach的对比"">"控件af:iterator以及af:forEach的对比"</a></h3>
+    </header>
+
+<h6 class="subheader" title="2013-09-23T00:00:00+08:00">2013-09-23(Monday) 00:00
+</h6>
+
+
+    <ul>
+<li>
+<p>平台:Jdeveloper 12c</p>
+</li>
+<li>
+<p>需求：对Collection类型遍历。MB中定义两个List，如何利用iterator&amp;foreach控件将List内容显示到页面。</p>
+</li>
+</ul>
+<p><strong>页面如下</strong></p>
+<p>分别绑定iterBean中的两个集合类型变量，将其中的值取出来。</p>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+<af:iterator id="i1" var="each" value="#{iterBean.list}" varStatus="row">
+    <af:panelBox text="#{each}" id="pb1">
+        <f:facet name="toolbar"/>
+        <af:inputText label="Values" id="it1" value="#{iterBean.values[row.index]}"/>
+    </af:panelBox>
+</af:iterator>
+<af:forEach items="#{iterBean.testList}"  var="each" varStatus="row">
+  <af:panelBox text="#{each.title}" id="pb2">
+    <af:outputText value="#{row.index} #{each.title}" id="ot1"/>
+    </af:panelBox>
+</af:forEach></p>
+<p><strong>BackingBean内容如下：</strong></p>
+<p>{% codeblock lang:java %}
+package cn.dengdezhao;
+import java.util.ArrayList;
+import java.util.List;
+public class IteratorBean {
+    List list = new ArrayList();
+    String[] values=new String[]{"1","2","3"};
+    List<contentList> testList=new ArrayList<contentList>();</p>
+<div class="highlight"><pre><span></span>public void setTestList(List&lt;contentList&gt; testList) {
+    System.out.println(&quot;setTestList...&quot;);
+    this.testList = testList;
+}
+public List&lt;contentList&gt; getTestList() {
+    System.out.println(&quot;getTestList...&quot;);
+
+    return testList;
+}
+public void setValues(String[] values) {
+    this.values = values;
+}
+public String[] getValues() {
+    return values;
+}
+public IteratorBean(){
+    list.add(&quot;A&quot;);
+    list.add(&quot;B&quot;);
+    list.add(&quot;C&quot;);
+    contentList a=new contentList();
+    a.setTitle(&quot;aaa&quot;);
+    testList.add(a);
+    contentList b=new contentList();
+    b.setTitle(&quot;bbb&quot;);
+    testList.add(b);
+    contentList c=new contentList();
+    c.setTitle(&quot;ccc&quot;);
+    testList.add(c);
+    System.out.println(&quot;init...&quot;);
+}
+public void setList(List list) {
+    System.out.println(&quot;setList ...&quot;);
+    this.list = list;
+}
+public List getList() {
+    System.out.println(&quot;getList...&quot;);
+    return list;
+}
+</pre></div>
+
+
+<p>}</p>
+<p>public class contentList {
+    private String title;</p>
+<div class="highlight"><pre><span></span>public void setTitle(String title) {
+    this.title = title;
+}
+
+public String getTitle() {
+    return title;
+}
+</pre></div>
+
+
+<p _="%" endcodeblock>}</p>
+<p><strong>测试结果</strong></p>
+<p><af:iterator>只调用了一次get方法；
+<af:forEach>却调用了9次get方法（根据容器中数量递增）；</p>
+<p><strong>结论</strong></p>
+<p><af:iterator>跟<af:forEach>控件都可以对容器类型遍历，只不过iterator是一次性取出容器内容，而forEach是多次取出。两控件都支持下标定位。</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/iterator.html">iterator </a>
+    <a href="http://localhost:8000/tag/foreach.html">foreach </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

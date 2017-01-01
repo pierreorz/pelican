@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - oracle</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/you-yi-wai-duan-dian-dao-zhi-oracle11gqi-dong-bu-qi-lai-de-wen-ti-jie-jue.html"><h3 class="article-title">"由意外断电导致oracle11g启动不起来的问题解决"</h3></a>
+<h6 class="subheader" title="2013-11-09T00:00:00+08:00">2013-11-09(Saturday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台: linux + oracle 11g    </p>
+</li>
+<li>
+<p>故障: 意外断电之后，监听启动不了</p>
+</li>
+</ul>
+<h4>解决方法</h4>
+<p>执行<code>lsnrctrl start</code>命令时报错误代码如下： </p>
+<p><code>TNS-12537</code>  <br>
+<code>TNS-12560</code>  <br>
+<code>TNS-00507</code>  <br>
+<code>Linux Error:29</code>    </p>
+<ul>
+<li>
+<p>检查/etc/hosts文件，没有发现异常。    </p>
+</li>
+<li>
+<dl>
+<dt>因为未改动任何配置文件，所以基本可以确定是断电造成文件损坏而引起。于是使用<code>relink all</code>看看能否解决该问题。</dt>
+<dt>{% codeblock lang:java %}</dt>
+<dt># cd $ORACLE_HOME/bin</dt>
+<dt># relink all</dt>
+<dt>{% endcodeblock %}</dt>
+<dt>执行<code>relink all</code>命令之后，再执行<code>lsnrctrl start</code>时，发现不报之前的错误了，出现了新的错误：</dt>
+<dt>{% codeblock lang:java %}</dt>
+<dt>symbol lookup error: $ORACLE_HOME/lib/libclntsh.so.11.1</dt>
+<dd _="%" endcodeblock>undefined symbol: nnftboot</dd>
+</dl>
+</li>
+<li>
+<p>看来是这个libclntsh.so.11.1出了问题，于是尝试去下载该文件替换掉。   </p>
+</li>
+<li>
+<p>从RPM search网站上下载到oracle-instance-client的RPM文件到本地。</p>
+</li>
+<li>
+<p>使用rpm2cpio命令抽取出里面的libclntsh.so.11.1</p>
+</li>
+</ul>
+<p>{% codeblock lang:java %}     </p>
+<h1>rpm2cpio oracle-instance-client-xxx.rpm | cpio -div</h1>
+<p>{% endcodeblock %}</p>
+<ul>
+<li>将得到的libclntsh.so.11.1文件替换掉$ORACLE_HOME/lib下的重名文件即可。    </li>
+</ul><p class="subheader">Category: <a href="http://localhost:8000/category/oracle.html">oracle</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/oracle.html">oracle </a>
+</p>
+
+
+
+            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ora-1222tnsno-such-protocol-adapter-wen-ti-jie-jue.html"><h3 class="article-title">ORA-1222：TNS:no such protocol adapter  问题解决</h3></a>
+<h6 class="subheader" title="2012-12-03T00:00:00+08:00">2012-12-03(Monday) 00:00
+</h6>
+
+
+<p>机器上安装的是instantOracleclient-basic-win32-11.2.0.1.0客户端，本来使用PLSQL developer是可以正常连接数据库的；</p>
+
+<p>后来开发需求装上了Form6<em>i，</em>发现连接数据库时弹出来ORA-1222：TNS:no such protocol adapter这个错误；</p>
+
+<p>解决方案：</p>
+
+<p><strong>1.配置PL/SQL Developer -&gt; Preferences ，OracleHome设置为Form6i的路径；</strong></p>
+
+<p><strong>2.我的电脑 -&gt; 用户变量 设置ORACLE_HOME 为Form6i路径</strong></p>
+
+<p><strong>或者可以直接编辑注册表，修改oracle_home的值为[Form安装的HOME文件夹]/[oracle客户端文件夹]；</strong></p>
+
+<p><strong>如果需要切换按以上步骤修改oracle_home再重启PLSQL Developer即可以正常连接数据库；
+</strong></p>
+
+<p><em>
+</em></p><p class="subheader">Category: <a href="http://localhost:8000/category/oracle.html">oracle</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/ora-1222.html">ora-1222 </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ora-1222tnsno-such-protocol-adapter-wen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/shi-yong-vpddui-shu-ju-jin-xing-ge-chi.html"><h3 class="article-title">使用VPD对数据进行隔离</h3></a>
+<h6 class="subheader" title="2012-06-28T00:00:00+08:00">2012-06-28(Thursday) 00:00
+</h6>
+
+
+<p>项目需求：系统数据表删除操作是直接物理删除，不利于维护历史记录，需要变更为逻辑删除模式。</p>
+
+<p>解决方案：</p>
+
+<p>对表增加删除标记字段DEL_FLAG varchar2(1) default ‘0’;</p>
+
+<p>用户执行“删除”操作时，并不执行物理删除操作，而是将DEL_FLAG值设置为‘1’；</p>
+
+<p>针对数据展示时，删除标记为’1’的数据使用VPD技术屏蔽访问；</p>
+
+<p><strong>1．需要修改的基表[T]新增删除字段：</strong></p>
+
+<p><strong>alter table</strong> T <strong>add</strong> (DEL_FLAG varchar2(1) <strong>default</strong> '0');--缺省为0，逻辑删除改为1</p>
+
+<p><strong>2．创建VPD需要的函数：</strong><strong>f_limited_query_t</strong><strong></strong></p>
+
+<p><strong>CREATE OR REPLACE FUNCTION</strong> f_limited_query_t (s_schema <strong>IN</strong> VARCHAR2,</p>
+
+<p>s_object <strong>IN</strong> VARCHAR2)</p>
+
+<p><strong>RETURN …</strong></p><p class="subheader">Category: <a href="http://localhost:8000/category/oracle.html">oracle</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/vpd.html">VPD </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/shi-yong-vpddui-shu-ju-jin-xing-ge-chi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/oracle-11g-shu-ju-ku-an-zhuang-hou-gai-ji-suan-ji-ming-chu-xian-wu-fa-lian-jie-de-wen-ti-jie-jue.html"><h3 class="article-title">oracle 11g 数据库安装后改计算机名出现无法连接的问题解决</h3></a>
+<h6 class="subheader" title="2011-07-15T00:00:00+08:00">2011-07-15(Friday) 00:00
+</h6>
+
+
+<p>在局域网内一台机器上安装完oracle11g之后，本地测试OK 可以访问orcl。用局域网内另一台机器连接的时候不行。<br />
+两台机器可以PING通。<br />
+修改tnsname.ora  把默认的localhost 都改成了本机IP 试试还是不行。<br />
+然后改了下计算机名，各种测试，打开EM还是只看到实例正常，监听程序为状态为不可用，实例的代理连接状态为不可用。<br />
+很是蛋疼，手贱不应该改计算机名啊。。。<br />
+想想多有可能要改的都改好了。。。怎么还是连不上？<br />
+是不是刚改好的还没有生效？<br />
+lsnrctl stop<br />
+lsnrctl start<br />
+各种重启服务之后，终于见到了全绿~~~</p><p class="subheader">Category: <a href="http://localhost:8000/category/oracle.html">oracle</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/oracle.html">oracle </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/oracle-11g-shu-ju-ku-an-zhuang-hou-gai-ji-suan-ji-ming-chu-xian-wu-fa-lian-jie-de-wen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+            <!-- /#posts-list -->
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - ADF</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/dong-tai-gai-bian-lovde-zhi-ji.html"><h3 class="article-title">动态改变LOV的值集</h3></a>
+<h6 class="subheader" title="2014-09-17T00:00:00+08:00">2014-09-17(Wednesday) 00:00
+</h6>
+
+
+<h4><i class="icon-file"></i>   需求：</h4>
+<p>LOV的值集需要根据传入的用户角色类型(A,B,C)动态改变，A时查询所有，B时过滤字段1，C时过滤字段2.</p>
+<p><strong>基础VO的SQL如下:</strong>
+    SELECT DISTINCT U.USER_ID, U.USER_NAME, F.FULL_NAME AS DESCRIPTION
+    FROM FND_USER U, PO_HEADERS_ALL P, PO_VENDORS V, PER_PEOPLE_F F
+    WHERE U.EMPLOYEE_ID = P.AGENT_ID
+    AND P.VENDOR_ID = V.VENDOR_ID
+    AND F.PERSON_ID(+) = U.EMPLOYEE_ID
+    AND P.APPROVED_FLAG = 'Y'
+    AND ((P.VENDOR_ID = :VARVENDORID AND :VARUSERTYPE = 'B') OR
+        (:VARUSERTYPE = 'A') OR
+        (:VARUSERTYPE = 'C' AND U.USER_ID = :VARUSERID))
+创建VARUSERTYPE VARUSERID VARVENDORID 三个绑定变量。</p>
+<h4><i class="icon-folder-open"></i> 创建LOV VO</h4>
+<p><strong>LVO的SQL如下:</strong>
+    SELECT NULL         AS USER_ID,
+        NULL         AS USER_NAME,
+        NULL         AS DESCRIPTION,
+        :VARTYPE     AS USERTYPE,<br>
+        :VARVENDORID AS VENDORID,
+        :VARUSERID   AS CURRENTUSERID
+    FROM DUAL
+技巧在这里，LVO同样创建三个绑定变量，并把绑定变量作为VO的attribute暴露出来，然后通过view Accessors传递给基础VO</p>
+<h4><i class="icon-pencil"></i> 设置View Accessors</h4>
+<ul>
+<li>
+<p>创建LOV    </p>
+</li>
+<li>
+<p>设置View Accessors    </p>
+</li>
+</ul>
+<p>这样就可以实现动态切换LOV的基础数据源了。</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/lov.html">LOV </a>
+</p>
+
+
+
+            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ding-zhi-el-function.html"><h3 class="article-title">"定制EL function"</h3></a>
+<h6 class="subheader" title="2014-02-07T00:00:00+08:00">2014-02-07(Friday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台: Jdeveloper 12c</p>
+</li>
+<li>
+<p>有时需要对字符串进行一些后再显示出来，可以写一个简单的taglib来实现，以下Demo是处理一个以冒号分隔的字符串，返回其中的第三个值。比如输入“aaa:bbb:ccc:ddd"，输出"ccc"。</p>
+</li>
+</ul>
+<h4>实现方法</h4>
+<p>创建一个空的java Project：Taglib</p>
+<ul>
+<li>创建Java类：SplitString.java    </li>
+</ul>
+<p>{% codeblock lang:java %}</p>
+<p>package cn.dengdezhao.taglib;</p>
+<p>public class SplitString {</p>
+<div class="highlight"><pre><span></span>public static String getString(String string) {
+    String[] strings = string.split(&quot;:&quot;, 3);
+    if (strings.length &gt; 2) {
+        return strings[2];
+    } else …</pre></div><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/el.html">EL </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ding-zhi-el-function.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/kong-jian-afiteratoryi-ji-afforeachde-dui-bi.html"><h3 class="article-title">"控件af:iterator以及af:forEach的对比"</h3></a>
+<h6 class="subheader" title="2013-09-23T00:00:00+08:00">2013-09-23(Monday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台:Jdeveloper 12c</p>
+</li>
+<li>
+<p>需求：对Collection类型遍历。MB中定义两个List，如何利用iterator&amp;foreach控件将List内容显示到页面。</p>
+</li>
+</ul>
+<p><strong>页面如下</strong></p>
+<p>分别绑定iterBean中的两个集合类型变量，将其中的值取出来。</p>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+<af:iterator id="i1" var="each" value="#{iterBean.list}" varStatus="row">
+    <af:panelBox text="#{each}" id="pb1">
+        <f:facet name="toolbar"/>
+        <af:inputText label="Values" id="it1" value="#{iterBean.values[row.index]}"/>
+    </af:panelBox>
+</af:iterator>
+<af:forEach items="#{iterBean.testList}"  var="each" varStatus="row">
+  <af:panelBox text="#{each.title}" id="pb2">
+    <af:outputText value="#{row.index} #{each.title}" id="ot1"/>
+    </af:panelBox>
+</af:forEach></p>
+<p><strong>BackingBean内容如下：</strong></p>
+<p>{% codeblock lang:java %}
+package cn.dengdezhao;
+import java.util.ArrayList;
+import java.util.List;
+public class IteratorBean {
+    List list = new ArrayList();
+    String[] values=new String[]{"1","2","3"};
+    List<contentList> testList=new ArrayList<contentList>();</p>
+<div class="highlight"><pre><span></span>public void setTestList …</pre></div><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/iterator.html">iterator </a>
+    <a href="http://localhost:8000/tag/foreach.html">foreach </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/kong-jian-afiteratoryi-ji-afforeachde-dui-bi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-zai-ye-mian-sui-pian-jia-zai-qian-diao-yong-luo-ji.html"><h3 class="article-title">"如何在页面碎片加载前调用逻辑"</h3></a>
+<h6 class="subheader" title="2013-09-23T00:00:00+08:00">2013-09-23(Monday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台:Jdeveloper 12c</p>
+</li>
+<li>
+<p>需求：在JSPX页面加载前如果需要调用逻辑可以通过重写PhaseListener实现，如果在JSFF页面碎片加载前（也即是region加载前）调用应该如何实现？</p>
+</li>
+</ul>
+<p><strong>实现方法</strong></p>
+<p>重写RegionController方法可以达到以上需求。</p>
+<ul>
+<li>重写 RegionController类，在refreshRegion方法中加入需要调用的逻辑即可在页面碎片加载之前调用。</li>
+</ul>
+<p>{% codeblock lang:java %}
+package cn.dengdezhao;
+import oracle.adf.model.RegionContext;
+import oracle.adf.model.RegionController;
+public class myController implements RegionController {
+    public myController() {
+        super();
+    }
+    @Override
+    public boolean refreshRegion(RegionContext regionContext) {
+        // TODO Implement this method
+        int flag=regionContext …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/regioncontroller.html">RegionController </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-zai-ye-mian-sui-pian-jia-zai-qian-diao-yong-luo-ji.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-huo-qu-webxmlzhong-de-context-paramcan-shu.html"><h3 class="article-title">"如何获取web.xml中的context-param参数"</h3></a>
+<h6 class="subheader" title="2013-09-04T00:00:00+08:00">2013-09-04(Wednesday) 00:00
+</h6>
+
+
+<p><strong>通过EL表达试获取</strong></p>
+<p _="%" endcodeblock>以web.xml中的<context-param>参数：javax.faces.FACELETS_VIEW_MAPPINGS为例,
+可通过以下EL获取。  <br>
+{% codeblock lang:java %}  <br>
+${initParam['javax.faces.FACELETS_VIEW_MAPPINGS']}  <br></p>
+<p _="%" endcodeblock>如果参数名称很简单，比如：testParameter，EL表达式也可以写成以下方式：   <br>
+{% codeblock lang:java %}  <br>
+${initParam.testParameter}  <br></p>
+<p><strong>通过JAVA代码获取</strong></p>
+<p _="%" endcodeblock>如果需要在MB方法中获取该参数值，可以参照以下代码：
+{% codeblock lang:java %}  <br>
+    public String action() {
+        FacesContext fctx=FacesContext.getCurrentInstance();
+        ExternalContext ec=fctx.getExternalContext();
+        ServletContext servletContext=(ServletContext)ec.getContext();
+        String value=servletContext.getInitParameter …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/context-param.html">context-param </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-huo-qu-webxmlzhong-de-context-paramcan-shu.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/attribute-set-for-xxxattribute-in-view-object-xxxvo-failedwen-ti-jie-jue.html"><h3 class="article-title">"Attribute set for xxxAttribute in view object xxxVO failed问题解决"</h3></a>
+<h6 class="subheader" title="2013-06-19T00:00:00+08:00">2013-06-19(Wednesday) 00:00
+</h6>
+
+
+<hr>
+<h2>平台：Jdeveloper 9i</h2>
+<p>异常描述：     </p>
+<p _="%" endcodeblock>在表增加单选checkbox时，在VO中创建transient属性selector,最终在页面中无法勾选checkbox，发现值没法保存到VO中，页面抛出该异常：<br>
+{% codeblock lang:java %} <br>
+null - Attribute set for Selector in view object employeeVO1 failed</p>
+<p>解决方案：    </p>
+<ol>
+<li>检查VO中的transient属性selector是否设置为updatable</li>
+<li _="%" endcodeblock>如果是在开发模式下，清空所有classes文件，重新编译；如果是在正式环境，删除该路径下的VO对象，可使用以下命令。  <br>
+{% codeblock lang:java %}
+exec jdr_utils.deletedocument('/oracle/apps/dengdezhao/test/server/employeeVO');  <br></li>
+</ol><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/attributeset.html">AttributeSet </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/attribute-set-for-xxxattribute-in-view-object-xxxvo-failedwen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/cong-backingbeanzhong-diao-yong-bu-dai-fragmentsde-taskflow.html"><h3 class="article-title">"从BackingBean中调用不带fragments的taskflow"</h3></a>
+<h6 class="subheader" title="2013-06-08T00:00:00+08:00">2013-06-08(Saturday) 00:00
+</h6>
+
+
+<p>有时候需要在backingBean中调用某一taskflow, 可以使用以下代码调用。不过只适用于可单独运行的taskflow，含有page fragments的taskflow不在此范围。    </p>
+<p _="%" endcodeblock>代码如下：  <br>
+{% codeblock lang:java %}
+    public String callTaskFlow() {
+        FacesContext fctx = FacesContext.getCurrentInstance();
+        ControllerContext cc = ControllerContext.getInstance();
+        String taskflowId = "btf_task";
+        String taskflowDocument = "/WEB-INF/btf_task.xml";
+        Map<String, Object> params = new HashMap<String, Object>();
+        TaskFlowId tid = new TaskFlowId(taskflowDocument, taskflowId);
+        String taskflowURL = cc.getTaskFlowURL(false, tid, params);
+        ExtendedRenderKitService …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/taskflow.html">taskflow </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/cong-backingbeanzhong-diao-yong-bu-dai-fragmentsde-taskflow.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/fen-ye-lan-chu-xian-3ge-wen-hao-bugjie-jue.html"><h3 class="article-title">"<af:table>分页栏出现3个问号BUG解决"</h3></a>
+<h6 class="subheader" title="2013-06-06T00:00:00+08:00">2013-06-06(Thursday) 00:00
+</h6>
+
+
+<hr>
+<p>平台：Jdeveloper 11.1.1.7.0</p>
+<hr>
+<p><strong>BUG描述</strong>
+标准控件af:table，“页”字前后出现三个问号。</p>
+<p><strong>原因分析</strong></p>
+<p _="%" endcodeblock>查看LOG文件  <br>
+{% codeblock lang:java %}
+<RenderingContext> <getTranslatedString> 无法从外观 mySkin.desktop 获取资源关键字 页  <br></p>
+<p>可见是RenderingContext类中getTranslatedString方法发生异常。  <br>
+查看源代码分析：    </p>
+<p><strong>找到源代码所在位置</strong>：  </p>
+<p><strong>将JAR包解压得到RenderingContext类，反编译查看</strong>    </p>
+<p _="%" endcodeblock>结果如下<strong>RenderingContext.class</strong>：  <br>
+{% codeblock lang:java %}
+  public String getTranslatedString(String key)
+  {
+    if (key == null)
+      return null;
+    try
+    {
+      return getSkin().getTranslatedString(getLocaleContext(), key);
+    }
+    catch …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/fen-ye-lan-chu-xian-3ge-wen-hao-bugjie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/groovyzai-adfzhong-de-ying-yong.html"><h3 class="article-title">"Groovy在ADF中的应用"</h3></a>
+<h6 class="subheader" title="2013-06-02T00:00:00+08:00">2013-06-02(Sunday) 00:00
+</h6>
+
+
+<p>使用Groovy脚本，在开发ADF应用中可以极大地提高开发效率，实现某些看似很复杂的功能。</p>
+<p _="%" endcodeblock>比如在empVO中获取sequence值:  <br>
+{% codeblock lang:java %}
+db = adf.object.getDBTransaction()  <br>
+sq = new oracle.jbo.server.SequenceImpl("EMPLOYEES_SEQ",db)  <br>
+sq.getSequenceNumber()  <br></p>
+<p _="%" endcodeblock><strong>在empVO中获取Salary字段最大值max：</strong>  <br>
+{% codeblock lang:java %}
+adf.object.getRowSet().max("Salary")</p>
+<p _="%" endcodeblock><strong>在empVO中获取Salary字段最小值min：</strong>  <br>
+{% codeblock lang:java %}
+adf.object.getRowSet().min("Salary")</p>
+<p _="%" endcodeblock><strong>在empVO中获取Salary字段合计sum：</strong>  <br>
+{% codeblock lang:java %}
+adf.object.getRowSet().sum("Salary")</p>
+<p _="%" endcodeblock><strong>在empVO中获取Salary字段均值avg：</strong>  <br>
+{% codeblock …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/groovy.html">groovy </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/groovyzai-adfzhong-de-ying-yong.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/li-yong-contextual-eventshua-xin-region.html"><h3 class="article-title">"利用contextual event刷新Region"</h3></a>
+<h6 class="subheader" title="2013-06-01T00:00:00+08:00">2013-06-01(Saturday) 00:00
+</h6>
+
+
+<p>平台： Jdev 11.1.1.7.0  <br>
+需求：两个region，其中一个region对数据进行修改后，需要刷新另外一个region显示   </p>
+<hr>
+<hr>
+<h4>创建bound taskflow: btf_form</h4>
+<p><img alt="../../../wp-content/uploads/QQ截图20130601204146.jpg" src="../../../wp-content/uploads/QQ截图20130601204146.jpg">    </p>
+<p>taskflow只包括一个页面碎片empForm.jsff，拖入employeeVO生成af:Form。  <br>
+<img alt="../../../wp-content/uploads/QQ截图20130601210114.jpg" src="../../../wp-content/uploads/QQ截图20130601210114.jpg">    </p>
+<h3>创建bound taskflow: btf_table</h3>
+<p>同上，只有一个页面碎片empTable.jsff，拖入employeeVO生成af:table。   <br>
+<img alt="../../../wp-content/uploads/QQ截图20130601210258.jpg" src="../../../wp-content/uploads/QQ截图20130601210258.jpg">        </p>
+<p>以上两个taskflow皆使用No Controller Transaction.</p>
+<h4>添加contextual event</h4>
+<p>需要在empTable.jsff页面中修改数据，单击commit按钮时，让empForm.jsff页面中的数据即时更新。因此，给commitbutton添加contextual event: saveEvent。  <br>
+<img alt="../../../wp-content/uploads/QQ截图20130601210725.jpg" src="../../../wp-content/uploads/QQ截图20130601210725.jpg">    </p>
+<h4>创建mainPG页面引入以上taskflow生成region</h4>
+<p>创建一个两栏jspx页面mainPG.jspx， 分别拖入以上两taskflow生成region。  <br>
+给contextual event 绑定consumer。    </p>
+<p>切换到mainPG.jspx页面的pagedef页面，从structure窗口中执行以下操作 …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/region.html">region </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/li-yong-contextual-eventshua-xin-region.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+            <!-- /#posts-list -->
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 4</h6>
+
+<p>
+
+        <a href="http://localhost:8000/category/adf2.html">Next &raquo;</a>
+</p>
+</div>
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

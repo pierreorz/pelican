@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>定制webcenter的people connection组件</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/ding-zhi-webcenterde-people-connectionzu-jian.html" rel="bookmark"
+        title="Permalink to 定制webcenter的people connection组件">定制webcenter的people connection组件</a></h3>
+    </header>
+
+<h6 class="subheader" title="2014-10-23T00:00:00+08:00">2014-10-23(Thursday) 00:00
+</h6>
+
+
+    <h4><i class="icon-file"></i>   需求：</h4>
+<p>webcenter的people connection类似于微博的关注粉丝功能，现在需要利用程序让某一用户自动关注一批人员。比如某一用户所在项目<code>(PROJECT1)</code>下有10个成员，则该用户进入portal的时候默认就展示其项目下的10个成员在某一分组<code>(PROJECT1)</code>下。</p>
+<h4><i class="icon-folder-open"></i> 分析：</h4>
+<p>根据项目PROJECT1可以查询出10个成员名；
+利用API将10个成员添加到Connections中；
+利用API创建Connection list，也即是分组名<code>(PROJECT1)</code>；
+将10个成员的Connection 添加到分组PROJECT1中。</p>
+<h4><i class="icon-pencil"></i> 技术实现：</h4>
+<ul>
+<li>
+<p>根据项目PROJECT1可以查询出10个成员名；
+在AMimpl中创建查询成员名方法以List返回结果。
+    public List<String> getAllMembersByProjectId(String proId){
+        List<String> result=new ArrayList<String>();
+        result.add("CG02");
+        result.add("CG03");
+        result.add("CG04");
+        result.add("CG05");
+        result.add("pierre");
+        result.add("weblogic");
+        //TODO 根据项目ID proId查询出项目所有成员以List返回
+        return result;
+    }</p>
+</li>
+<li>
+<p>利用API将10个成员添加到Connections中；
+oracle.webcenter.peopleconnections.connections.internal.model.ConnectionsManagerImpl.createConnection 方法可以给两个guid创建Connection
+    ConnectionsServiceFactory fac=ConnectionsServiceFactory.getInstance();
+    ConnectionsManagerImpl cm=(ConnectionsManagerImpl)fac.getConnectionsManager();
+    cm.createConnection(ownerUserId, connectUserId);</p>
+</li>
+<li>
+<p>利用API创建Connection list，也即是分组名<code>(PROJECT1)</code>；
+ConnectionListsManager.createConnectionList 可以创建分组
+    ConnectionsServiceFactory fac=ConnectionsServiceFactory.getInstance();
+    fac.getConnectionListsManager().createConnectionList("PROJECT1");</p>
+</li>
+<li>
+<p>将10个成员的Connection 添加到分组PROJECT1中。
+利用API ConnectionListsManager.addMembersToConnectionList方法可以将创建好的Connection添加到分组中去。样例代码如下：
+    ConnectionsServiceFactory fac=ConnectionsServiceFactory.getInstance();
+    fac.getConnectionListsManager().addMembersToConnectionList(List, "PROJECT1");</p>
+</li>
+</ul>
+<p>创建Webcenter Portal Server Extension应用，创建TaskFlow调用以上方法；发布扩展应用到spaces，重启spaces，定义resource catalog应用到portal上即可。</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/webcenter.html">webcenter</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/peopleconnection.html">peopleConnection </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

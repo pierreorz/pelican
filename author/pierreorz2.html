@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - pierreorz</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+
+            <article>
+                <a href="http://localhost:8000/an-zhuang-rcu17yu-dao-de-xiao-wen-ti.html"><h3 class="article-title">"安装RCU1.7遇到的小问题"</h3></a>
+<h6 class="subheader" title="2014-04-18T00:00:00+08:00">2014-04-18(Friday) 00:00
+</h6>
+
+
+<ul>
+<li>环境：此前安装过soa1.6，最近重新安装soa1.7时遇到的问题</li>
+<li>安装Rcu1.7时，发现无法运行./rcu,错误提示如下：</li>
+</ul>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+rcuHome/jdk/jre/bin/java: cannot execute binary file.</p>
+<p>查看操作系统发现是32bit,而rcu只有64bit的。</p>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+$getconf LONG_BIT  <br>
+32  <br></p>
+<p>在32bit系统上安装64bit软件向下兼容应该是可以安装的，因此怀疑是jdk的问题。</p>
+<p>修改rcu文件最后几行的jre_home 为中间件文件夹中的JDK：/home/pierre/Oracle/Middleware/jdk160_24/bin/java 后，重新运行即可解决该问题。</p>
+<ul>
+<li>
+<p>成功运行rcu之后，进入配置oracle数据库信息页，一直报 invalid service 错误, 原来是service …</p></li></ul><p class="subheader">Category: <a href="http://localhost:8000/category/soa.html">soa</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/soa.html">soa </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/an-zhuang-rcu17yu-dao-de-xiao-wen-ti.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ding-zhi-el-function.html"><h3 class="article-title">"定制EL function"</h3></a>
+<h6 class="subheader" title="2014-02-07T00:00:00+08:00">2014-02-07(Friday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台: Jdeveloper 12c</p>
+</li>
+<li>
+<p>有时需要对字符串进行一些后再显示出来，可以写一个简单的taglib来实现，以下Demo是处理一个以冒号分隔的字符串，返回其中的第三个值。比如输入“aaa:bbb:ccc:ddd"，输出"ccc"。</p>
+</li>
+</ul>
+<h4>实现方法</h4>
+<p>创建一个空的java Project：Taglib</p>
+<ul>
+<li>创建Java类：SplitString.java    </li>
+</ul>
+<p>{% codeblock lang:java %}</p>
+<p>package cn.dengdezhao.taglib;</p>
+<p>public class SplitString {</p>
+<div class="highlight"><pre><span></span>public static String getString(String string) {
+    String[] strings = string.split(&quot;:&quot;, 3);
+    if (strings.length &gt; 2) {
+        return strings[2];
+    } else …</pre></div><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/el.html">EL </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ding-zhi-el-function.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/you-yi-wai-duan-dian-dao-zhi-oracle11gqi-dong-bu-qi-lai-de-wen-ti-jie-jue.html"><h3 class="article-title">"由意外断电导致oracle11g启动不起来的问题解决"</h3></a>
+<h6 class="subheader" title="2013-11-09T00:00:00+08:00">2013-11-09(Saturday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台: linux + oracle 11g    </p>
+</li>
+<li>
+<p>故障: 意外断电之后，监听启动不了</p>
+</li>
+</ul>
+<h4>解决方法</h4>
+<p>执行<code>lsnrctrl start</code>命令时报错误代码如下： </p>
+<p><code>TNS-12537</code>  <br>
+<code>TNS-12560</code>  <br>
+<code>TNS-00507</code>  <br>
+<code>Linux Error:29</code>    </p>
+<ul>
+<li>
+<p>检查/etc/hosts文件，没有发现异常。    </p>
+</li>
+<li>
+<dl>
+<dt>因为未改动任何配置文件，所以基本可以确定是断电造成文件损坏而引起。于是使用<code>relink all</code>看看能否解决该问题。</dt>
+<dt>{% codeblock lang:java %}</dt>
+<dt># cd $ORACLE_HOME/bin</dt>
+<dt># relink all</dt>
+<dt>{% endcodeblock %}</dt>
+<dt>执行<code>relink all</code>命令之后，再执行<code>lsnrctrl start</code>时，发现不报之前的错误了，出现了新的错误：</dt>
+<dt>{% codeblock lang:java …</dt></dl></li></ul><p class="subheader">Category: <a href="http://localhost:8000/category/oracle.html">oracle</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/oracle.html">oracle </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/you-yi-wai-duan-dian-dao-zhi-oracle11gqi-dong-bu-qi-lai-de-wen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/kong-jian-afiteratoryi-ji-afforeachde-dui-bi.html"><h3 class="article-title">"控件af:iterator以及af:forEach的对比"</h3></a>
+<h6 class="subheader" title="2013-09-23T00:00:00+08:00">2013-09-23(Monday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台:Jdeveloper 12c</p>
+</li>
+<li>
+<p>需求：对Collection类型遍历。MB中定义两个List，如何利用iterator&amp;foreach控件将List内容显示到页面。</p>
+</li>
+</ul>
+<p><strong>页面如下</strong></p>
+<p>分别绑定iterBean中的两个集合类型变量，将其中的值取出来。</p>
+<p _="%" endcodeblock>{% codeblock lang:java %}
+<af:iterator id="i1" var="each" value="#{iterBean.list}" varStatus="row">
+    <af:panelBox text="#{each}" id="pb1">
+        <f:facet name="toolbar"/>
+        <af:inputText label="Values" id="it1" value="#{iterBean.values[row.index]}"/>
+    </af:panelBox>
+</af:iterator>
+<af:forEach items="#{iterBean.testList}"  var="each" varStatus="row">
+  <af:panelBox text="#{each.title}" id="pb2">
+    <af:outputText value="#{row.index} #{each.title}" id="ot1"/>
+    </af:panelBox>
+</af:forEach></p>
+<p><strong>BackingBean内容如下：</strong></p>
+<p>{% codeblock lang:java %}
+package cn.dengdezhao;
+import java.util.ArrayList;
+import java.util.List;
+public class IteratorBean {
+    List list = new ArrayList();
+    String[] values=new String[]{"1","2","3"};
+    List<contentList> testList=new ArrayList<contentList>();</p>
+<div class="highlight"><pre><span></span>public void setTestList …</pre></div><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/iterator.html">iterator </a>
+    <a href="http://localhost:8000/tag/foreach.html">foreach </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/kong-jian-afiteratoryi-ji-afforeachde-dui-bi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-zai-ye-mian-sui-pian-jia-zai-qian-diao-yong-luo-ji.html"><h3 class="article-title">"如何在页面碎片加载前调用逻辑"</h3></a>
+<h6 class="subheader" title="2013-09-23T00:00:00+08:00">2013-09-23(Monday) 00:00
+</h6>
+
+
+<ul>
+<li>
+<p>平台:Jdeveloper 12c</p>
+</li>
+<li>
+<p>需求：在JSPX页面加载前如果需要调用逻辑可以通过重写PhaseListener实现，如果在JSFF页面碎片加载前（也即是region加载前）调用应该如何实现？</p>
+</li>
+</ul>
+<p><strong>实现方法</strong></p>
+<p>重写RegionController方法可以达到以上需求。</p>
+<ul>
+<li>重写 RegionController类，在refreshRegion方法中加入需要调用的逻辑即可在页面碎片加载之前调用。</li>
+</ul>
+<p>{% codeblock lang:java %}
+package cn.dengdezhao;
+import oracle.adf.model.RegionContext;
+import oracle.adf.model.RegionController;
+public class myController implements RegionController {
+    public myController() {
+        super();
+    }
+    @Override
+    public boolean refreshRegion(RegionContext regionContext) {
+        // TODO Implement this method
+        int flag=regionContext …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/regioncontroller.html">RegionController </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-zai-ye-mian-sui-pian-jia-zai-qian-diao-yong-luo-ji.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ru-he-huo-qu-webxmlzhong-de-context-paramcan-shu.html"><h3 class="article-title">"如何获取web.xml中的context-param参数"</h3></a>
+<h6 class="subheader" title="2013-09-04T00:00:00+08:00">2013-09-04(Wednesday) 00:00
+</h6>
+
+
+<p><strong>通过EL表达试获取</strong></p>
+<p _="%" endcodeblock>以web.xml中的<context-param>参数：javax.faces.FACELETS_VIEW_MAPPINGS为例,
+可通过以下EL获取。  <br>
+{% codeblock lang:java %}  <br>
+${initParam['javax.faces.FACELETS_VIEW_MAPPINGS']}  <br></p>
+<p _="%" endcodeblock>如果参数名称很简单，比如：testParameter，EL表达式也可以写成以下方式：   <br>
+{% codeblock lang:java %}  <br>
+${initParam.testParameter}  <br></p>
+<p><strong>通过JAVA代码获取</strong></p>
+<p _="%" endcodeblock>如果需要在MB方法中获取该参数值，可以参照以下代码：
+{% codeblock lang:java %}  <br>
+    public String action() {
+        FacesContext fctx=FacesContext.getCurrentInstance();
+        ExternalContext ec=fctx.getExternalContext();
+        ServletContext servletContext=(ServletContext)ec.getContext();
+        String value=servletContext.getInitParameter …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/context-param.html">context-param </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ru-he-huo-qu-webxmlzhong-de-context-paramcan-shu.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/centosxia-an-zhuang-mysql56hou-wang-ji-rootmi-ma-zhong-zhi-mi-ma.html"><h3 class="article-title">"Centos下安装mysql5.6后忘记ROOT密码，重置密码"</h3></a>
+<h6 class="subheader" title="2013-06-25T00:00:00+08:00">2013-06-25(Tuesday) 00:00
+</h6>
+
+
+<p><strong>安装</strong></p>
+<p _="%" endcodeblock>去<a href="https://edelivery.oracle.com/EPD/Search/handle_go">oracle官网</a>下载mysql5.6 for linux安装介质V38444-01.zip。  <br>
+解压缩之后  <br>
+{% codeblock lang:java %}
+MySQL-client-advanced-5.6.12-1.el6.i686.rpm
+MySQL-devel-advanced-5.6.12-1.el6.i686.rpm
+MySQL-embedded-advanced-5.6.12-1.el6.i686.rpm
+MySQL-server-advanced-5.6.12-1.el6.i686.rpm
+MySQL-shared-advanced-5.6.12-1.el6.i686.rpm
+MySQL-shared-compat-advanced-5.6.12-1.el6.i686.rpm
+MySQL-test-advanced-5.6 …</p><p class="subheader">Category: <a href="http://localhost:8000/category/linux.html">linux</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/mysql.html">mysql </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/centosxia-an-zhuang-mysql56hou-wang-ji-rootmi-ma-zhong-zhi-mi-ma.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/attribute-set-for-xxxattribute-in-view-object-xxxvo-failedwen-ti-jie-jue.html"><h3 class="article-title">"Attribute set for xxxAttribute in view object xxxVO failed问题解决"</h3></a>
+<h6 class="subheader" title="2013-06-19T00:00:00+08:00">2013-06-19(Wednesday) 00:00
+</h6>
+
+
+<hr>
+<h2>平台：Jdeveloper 9i</h2>
+<p>异常描述：     </p>
+<p _="%" endcodeblock>在表增加单选checkbox时，在VO中创建transient属性selector,最终在页面中无法勾选checkbox，发现值没法保存到VO中，页面抛出该异常：<br>
+{% codeblock lang:java %} <br>
+null - Attribute set for Selector in view object employeeVO1 failed</p>
+<p>解决方案：    </p>
+<ol>
+<li>检查VO中的transient属性selector是否设置为updatable</li>
+<li _="%" endcodeblock>如果是在开发模式下，清空所有classes文件，重新编译；如果是在正式环境，删除该路径下的VO对象，可使用以下命令。  <br>
+{% codeblock lang:java %}
+exec jdr_utils.deletedocument('/oracle/apps/dengdezhao/test/server/employeeVO');  <br></li>
+</ol><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/attributeset.html">AttributeSet </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/attribute-set-for-xxxattribute-in-view-object-xxxvo-failedwen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/cong-backingbeanzhong-diao-yong-bu-dai-fragmentsde-taskflow.html"><h3 class="article-title">"从BackingBean中调用不带fragments的taskflow"</h3></a>
+<h6 class="subheader" title="2013-06-08T00:00:00+08:00">2013-06-08(Saturday) 00:00
+</h6>
+
+
+<p>有时候需要在backingBean中调用某一taskflow, 可以使用以下代码调用。不过只适用于可单独运行的taskflow，含有page fragments的taskflow不在此范围。    </p>
+<p _="%" endcodeblock>代码如下：  <br>
+{% codeblock lang:java %}
+    public String callTaskFlow() {
+        FacesContext fctx = FacesContext.getCurrentInstance();
+        ControllerContext cc = ControllerContext.getInstance();
+        String taskflowId = "btf_task";
+        String taskflowDocument = "/WEB-INF/btf_task.xml";
+        Map<String, Object> params = new HashMap<String, Object>();
+        TaskFlowId tid = new TaskFlowId(taskflowDocument, taskflowId);
+        String taskflowURL = cc.getTaskFlowURL(false, tid, params);
+        ExtendedRenderKitService …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/taskflow.html">taskflow </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/cong-backingbeanzhong-diao-yong-bu-dai-fragmentsde-taskflow.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/fen-ye-lan-chu-xian-3ge-wen-hao-bugjie-jue.html"><h3 class="article-title">"<af:table>分页栏出现3个问号BUG解决"</h3></a>
+<h6 class="subheader" title="2013-06-06T00:00:00+08:00">2013-06-06(Thursday) 00:00
+</h6>
+
+
+<hr>
+<p>平台：Jdeveloper 11.1.1.7.0</p>
+<hr>
+<p><strong>BUG描述</strong>
+标准控件af:table，“页”字前后出现三个问号。</p>
+<p><strong>原因分析</strong></p>
+<p _="%" endcodeblock>查看LOG文件  <br>
+{% codeblock lang:java %}
+<RenderingContext> <getTranslatedString> 无法从外观 mySkin.desktop 获取资源关键字 页  <br></p>
+<p>可见是RenderingContext类中getTranslatedString方法发生异常。  <br>
+查看源代码分析：    </p>
+<p><strong>找到源代码所在位置</strong>：  </p>
+<p><strong>将JAR包解压得到RenderingContext类，反编译查看</strong>    </p>
+<p _="%" endcodeblock>结果如下<strong>RenderingContext.class</strong>：  <br>
+{% codeblock lang:java %}
+  public String getTranslatedString(String key)
+  {
+    if (key == null)
+      return null;
+    try
+    {
+      return getSkin().getTranslatedString(getLocaleContext(), key);
+    }
+    catch …</p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/fen-ye-lan-chu-xian-3ge-wen-hao-bugjie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+            <!-- /#posts-list -->
+<div class="pagination-centered">
+<h6 class="subheader">Page 2 of 8</h6>
+
+<p>
+            <a href="http://localhost:8000/author/pierreorz.html">&laquo; Prev</a>
+
+        <a href="http://localhost:8000/author/pierreorz3.html">Next &raquo;</a>
+</p>
+</div>
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

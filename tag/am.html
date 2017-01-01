@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - am</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/guan-yu-applicatoinmodulelei-xing-zong-jie.html"><h3 class="article-title">"关于ApplicatoinModule类型总结"</h3></a>
+<h6 class="subheader" title="2013-05-28T00:00:00+08:00">2013-05-28(Tuesday) 00:00
+</h6>
+
+
+<h2>平台：Jdev11.1.2.3.0</h2>
+<h4>AM的类型</h4>
+<p><strong>1. Root AM</strong>  <br>
+<strong>2. Nested AM</strong>  <br>
+<strong>3. Shared AM</strong>    </p>
+<h4>三种类型AM的比较</h4>
+<p>首先谈谈RootAM的数量，RootAM原则上来说越少越好，因为当用户访问工程的时候数据库连接数量会根据RootAM的数量成倍增加极大地增加了数据库的压力。但是很多时候由于业务的复杂性，单一的AM无法满足实际开发的需求，所有的业务逻辑都写在一个AM里极不利于多个团队的协同开发。  <br>
+这个时候NestedAM就发挥其作用了，NestedAM是共享其父类RootAM的数据库连接的，所以不会额外增加连接数量，利用NestedAM可以将业务逻辑拆分开来，每个团队都可以使用自己单独的NestedAM，团队之间彼此冲突地可能性大大减少。
+再说SharedAM，大型项目中很多模块的功能是通用的，比如LOV或者一些在使用中基本不需要改变的固定配置数据等，这类数据对项目所有访问用户都是固定的，可以使用SharedAM来维护这类型数据。</p>
+<h4>三种类型的AM的创建方法</h4>
+<ol>
+<li>RootAM,默认创建的AM即是RootAM    </li>
+<li>
+<p>NestedAM创建方法  <br>
+   先创建两个RootAM(deptAm,empAm)，分别拥有VO instance（DeptVO,EmpVO)；  <br>
+再创建一个RootAM（rootAM)，双击该rootAM，在Data Model标签页中，展开Application Module Instances节点，如下图所示添加deptAm,empAM为该rootAM的NestedAM。  <br>
+<img alt="../../../wp-content/uploads/QQ截图20130528145149.jpg" src="../../../wp-content/uploads/QQ截图20130528145149.jpg"></p>
+</li>
+<li>
+<p>创建SharedAM的方法更为简单，在上面创建好RootAM之后，右键该Model工程属性，切换到ADF Business Components-Application Module标签页，如下图所示添加SharedAM，SharedAM有两种级别，一种是Application级别的，一种是Session级别的，可根据实际需要将该AM设置为Applicatoin或者是Session级别，二选一。    </p>
+</li>
+</ol>
+<p><img alt="../../../wp-content/uploads/QQ截图20130528150742.jpg" src="../../../wp-content/uploads/QQ截图20130528150742.jpg"></p>
+<p>PS：基于多DB连接的多AM创建可参考前一博文<a href="../../../blog/2013-05-23/adfchuang-jian-liang-ge-amji-yu-bu-tong-de-dblian-jie/">"ADF创建两个AM基于不同的DB连接"</a></p><p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/am.html">am </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

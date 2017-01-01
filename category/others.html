@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - others</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/solvedlong-mode-not-supported-rebooting-press-any-key-to-reboot.html"><h3 class="article-title">! '[SOLVED]Long mode not supported, rebooting Press any key to reboot'</h3></a>
+<h6 class="subheader" title="2013-01-31T00:00:00+08:00">2013-01-31(Thursday) 00:00
+</h6>
+
+
+<p>虚拟机安装solaris 11的时候弹出
+<blockquote>Long mode not supported, rebooting Press any key to reboot........</blockquote>
+原因是solaris11只支持64位，需要把BIOS的CPU选项里Inter Virtualization Technology和Inter VT均设置为ENABLE，</p>
+
+<p>然后将虚拟机的设置如下：
+<blockquote>Virtual Machine Setting-&gt;Processors-&gt;Virtualizatoin engine-&gt;Preferred mode=Intel VT-x/EPT or AMD-v/RVI</blockquote></p><p class="subheader">Category: <a href="http://localhost:8000/category/others.html">others</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/vmware.html">vmware </a>
+</p>
+
+
+
+            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/firefoxsheng-ji-18zhi-hou-autoproxyshi-xiao-goagentwu-fa-shi-yong-wen-ti-jie-jue.html"><h3 class="article-title">firefox升级18之后,autoproxy失效,goagent无法使用问题解决</h3></a>
+<h6 class="subheader" title="2013-01-30T00:00:00+08:00">2013-01-30(Wednesday) 00:00
+</h6>
+
+
+<p>之前使用的是17版本的firefox，配置好了autoproxy使用goagent能够正常代理，之后升级firefox18之后，却代理不了了。重装过firefox,重装过goagent，重装过autoproxy都无效。</p>
+
+<p>试过使用IE，设置代理127.0.0.1:8087+goagent可以正常代理，因此排除goagent问题。</p>
+
+<p>后来查看firefox18的版本说明，才发现由于安全性禁用了部分功能猜测可能由此导致无法代理</p>
+
+<p>firefox说明：
+<blockquote>禁用不安全内容：Firefox 可以禁用HTTPS安全网页中的不安全内容，来维护用户在互联网通信中的隐私。目前可以在about:config中启用这个特性。</blockquote>
+打开about:config，过滤栏输入：proxy  修改如下选项</p>
+
+<p>extensions.autoproxy.proxyMode   <strong>auto</strong>
+network.proxy.type               <strong>1</strong>
+signon.autologin.proxy           <strong>true</strong>
+即可解决问题。</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p><p class="subheader">Category: <a href="http://localhost:8000/category/others.html">others</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/firefox.html">firefox </a>
+    <a href="http://localhost:8000/tag/goagent.html">goagent </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/firefoxsheng-ji-18zhi-hou-autoproxyshi-xiao-goagentwu-fa-shi-yong-wen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/about.html"><h3 class="article-title">About</h3></a>
+<h6 class="subheader" title="2000-08-09T22:56:00+08:00">2000-08-09(Wednesday) 22:56
+</h6>
+
+
+<h4>NickName: pierreorz or 49</h4>
+<p>目前自由职业，工作事宜你可以联系我：</p>
+<h4>Email:</h4>
+<div class="highlight"><pre><span></span>pierreorz AT 126.com
+</pre></div>
+
+
+<h4>QQ:</h4>
+<div class="highlight"><pre><span></span>54482733
+</pre></div>
+
+
+<h4>关于本博</h4>
+<div class="highlight"><pre><span></span>2016-05-30 使用pelican重构
+2014-04-25 因政策原因stdyun.com迁至国外，重新托管于github.com    
+2013-04-15 托管服务器从github.com迁至stdyun.com
+2013-03-12 绑定域名dengdezhao.cn
+2013-03-09 从WordPress迁移至Octopress
+2011-05-25 adfkf.com 基于wordpress搭建
+</pre></div><p class="subheader">Category: <a href="http://localhost:8000/category/others.html">others</a>
+
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/about.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+            <!-- /#posts-list -->
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

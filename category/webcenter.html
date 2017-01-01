@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - webcenter</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/shi-yong-ridczai-webcenter-portalji-cheng-ecmde-wen-dang-cha-xun-gong-neng.html"><h3 class="article-title">使用RIDC在webcenter portal集成ECM的文档查询功能</h3></a>
+<h6 class="subheader" title="2014-11-28T00:00:00+08:00">2014-11-28(Friday) 00:00
+</h6>
+
+
+<h4><i class="icon-file"></i>   需求：</h4>
+<p>标准的document service很不灵活，实际开发中少不了要开发定制。那么问题来了，通过RIDC很灵活的查询出了需要的文档，如何集成到portal上去呢</p>
+<h4><i class="icon-folder-open"></i> 分析：</h4>
+<p>使用RIDC查询出需要的文档，存放在POJO等数据模型中
+利用POJO生成dataControl，开发taskflow等UI层
+将以上功能开发成为extend.spaces.webapp，扩展到webcenter spaces
+以下主要展现第一步：通过RIDC查询及POJO生成数据模型。</p>
+<h4><i class="icon-pencil"></i> 技术实现：</h4>
+<ul>
+<li>使用RIDC查询文档</li>
+</ul>
+<p>以下是主要查询方法, query传入的即是ECM的queryText，例如：
+        dDocType <matches> <code>PJT-INTERFACE-DOC</code>
+通过拼接好需要的查询条件以及用户便可以查询出文档。</p>
+<div class="highlight"><pre><span></span>    <span class="nt">public</span> <span class="nt">List</span><span class="o">&lt;</span><span class="nt">Document</span><span class="o">&gt;</span> <span class="nt">search</span><span class="o">(</span><span class="nt">String</span> <span class="nt">username</span><span class="o">,</span> <span class="nt">String</span> <span class="nt">query</span><span class="o">)</span> <span class="p">{</span>
+        <span class="n">ServiceResponse</span> <span class="n">serviceResponse</span> <span class="o">=</span> <span class="n">null</span><span class="p">;</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Document</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Document</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">try</span> <span class="err">{</span>
+            <span class="n">if</span> <span class="p">(</span><span class="n">query</span> <span class="o">==</span> <span class="n">null</span><span class="p">)</span> <span class="err">{</span>
+                <span class="n">return</span> <span class="n">list</span><span class="p">;</span>
+            <span class="p">}</span>
+    <span class="nt">IdcClient</span> <span class="nt">client</span> <span class="o">=</span> <span class="nt">getIdcClient</span><span class="o">();</span>
+            <span class="nt">DataBinder</span> <span class="nt">dataBinderReq</span> <span class="o">=</span> <span class="nt">client</span><span class="nc">.createBinder</span><span class="o">();</span>
+        <span class="nt">dataBinderReq</span><span class="nc">.putLocal</span><span class="o">(</span><span class="s2">&quot;IdcService&quot;</span><span class="o">,</span> <span class="s2">&quot;GET_SEARCH_RESULTS&quot;</span><span class="o">);</span>
+            <span class="nt">dataBinderReq</span><span class="nc">.putLocal</span><span class="o">(</span><span class="s2">&quot;QueryText&quot;</span><span class="o">,</span> <span class="nt">query</span><span class="nc">.toString</span><span class="o">());</span>
+            <span class="nt">dataBinderReq</span><span class="nc">.putLocal</span><span class="o">(</span><span class="s2">&quot;ResultCount&quot;</span><span class="o">,</span> <span class="s2">&quot;100&quot;</span><span class="o">);</span>
+            <span class="nt">serviceResponse</span> <span class="o">=</span>
+                <span class="nt">client</span><span class="nc">.sendRequest</span><span class="o">(</span><span class="nt">new</span> <span class="nt">IdcContext</span><span class="o">(</span><span class="nt">username</span><span class="o">),</span> <span class="nt">dataBinderReq</span><span class="o">);</span>
+            <span class="nt">DataBinder</span> <span class="nt">dataBinderRes</span> <span class="o">=</span> <span class="nt">serviceResponse</span><span class="nc">.getResponseAsBinder</span><span class="o">();</span>
+            <span class="nt">DataResultSet</span> <span class="nt">resultSet</span> <span class="o">=</span>
+            <span class="nt">dataBinderRes</span><span class="nc">.getResultSet</span><span class="o">(</span><span class="s2">&quot;SearchResults&quot;</span><span class="o">);</span>
+            <span class="nt">for</span> <span class="o">(</span><span class="nt">DataObject</span> <span class="nt">dataObject</span> <span class="o">:</span> <span class="nt">resultSet</span><span class="nc">.getRows</span><span class="o">())</span> <span class="p">{</span>
+                <span class="n">Document</span> <span class="n">d</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Document</span><span class="p">();</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setContentId</span><span class="p">(</span><span class="n">dataObject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dDocName&quot;</span><span class="p">));</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setDocumentId</span><span class="p">(</span><span class="n">dataObject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dID&quot;</span><span class="p">));</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setOwner</span><span class="p">(</span><span class="n">dataObject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dDocAuthor&quot;</span><span class="p">));</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="n">dataObject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dDocTitle&quot;</span><span class="p">));</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setDocType</span><span class="p">(</span><span class="n">dataObject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dDocType&quot;</span><span class="p">));</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setXspeciality</span><span class="p">(</span><span class="n">dataObject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xSPECIALTY&quot;</span><span class="p">));</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setXrcvMajor</span><span class="p">(</span><span class="n">dataObject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xRCV_MAJOR&quot;</span><span class="p">));</span>
+                <span class="n">Date</span> <span class="n">date</span> <span class="o">=</span> <span class="n">dataObject</span><span class="o">.</span><span class="n">getDate</span><span class="p">(</span><span class="s2">&quot;dInDate&quot;</span><span class="p">);</span>
+                <span class="n">SimpleDateFormat</span> <span class="n">sf</span> <span class="o">=</span> <span class="n">new</span> <span class="n">SimpleDateFormat</span><span class="p">(</span><span class="s2">&quot;yyyy/mm/dd&quot;</span><span class="p">);</span>
+                <span class="n">String</span> <span class="n">format</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">);</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">setDindate</span><span class="p">(</span><span class="n">format</span><span class="p">);</span>
+                <span class="n">list</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="err">}</span> <span class="nt">catch</span> <span class="o">(</span><span class="nt">Exception</span> <span class="nt">ex</span><span class="o">)</span> <span class="p">{</span>
+             <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Error Search: &quot;</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span><span class="p">());</span>
+        <span class="p">}</span> <span class="nt">finally</span> <span class="p">{</span>
+            <span class="n">if</span> <span class="p">(</span><span class="n">serviceResponse</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="err">{</span>
+                <span class="n">serviceResponse</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="err">}</span>
+        <span class="nt">return</span> <span class="nt">list</span><span class="o">;</span>
+    <span class="err">}</span> <span class="o">//</span>
+</pre></div>
+
+
+<p>其中Document.java即是POJO类</p>
+<div class="highlight"><pre><span></span>    public class Document {
+        private String contentId;
+        private String documentId;
+        private String owner;
+        private String title;
+        private String doctype;
+        private String securitygroup;
+        private String dindate;
+        private String xDesignPhase;
+        private String xspeciality;//send
+        private String xrcvMajor;//receive
+    ......get set accessor......
+    }//end class
+</pre></div>
+
+
+<p>创建facade类：MyCondition.java，主要是调用search方法接受RIDC查询的结果集，生成dataControl供UI层使用。参考代码如下：</p>
+<div class="highlight"><pre><span></span>    <span class="nt">public</span> <span class="nt">class</span> <span class="nt">MyCondition</span> <span class="p">{</span>
+        <span class="n">private</span> <span class="nb">static</span> <span class="n">final</span> <span class="n">ADFLogger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">ADFLogger</span><span class="o">.</span><span class="n">createADFLogger</span><span class="p">(</span><span class="n">MyCondition</span><span class="o">.</span><span class="n">class</span><span class="p">);</span>
+        <span class="n">private</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Document</span><span class="o">&gt;</span> <span class="n">receiveDocumentList</span><span class="p">;</span>
+        <span class="n">private</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Document</span><span class="o">&gt;</span> <span class="n">sendDocumentList</span><span class="p">;</span>
+        <span class="n">public</span> <span class="n">MyCondition</span><span class="p">()</span> <span class="err">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">receiveDocumentList</span><span class="o">=</span><span class="n">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Document</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">sendDocumentList</span><span class="o">=</span><span class="n">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Document</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="c">/*******</span>
+<span class="c">        * 初始化，调用RIDC API查询出文档数据集</span>
+<span class="c">        * *****/</span>
+        <span class="nt">public</span> <span class="nt">String</span> <span class="nt">init</span><span class="o">()</span><span class="p">{</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">severe</span><span class="p">(</span><span class="s2">&quot;start init....&quot;</span><span class="p">);</span>
+        <span class="n">Object</span> <span class="n">userId</span> <span class="o">=</span> <span class="n">JSFUtils</span><span class="o">.</span><span class="n">resolveExpression</span><span class="p">(</span><span class="s2">&quot;#{securityContext.userName}&quot;</span><span class="p">);</span>
+        <span class="n">Object</span> <span class="n">projectCode</span> <span class="o">=</span> <span class="n">JSFUtils</span><span class="o">.</span><span class="n">resolveExpression</span><span class="p">(</span><span class="s2">&quot;#{pageFlowScope.inputProjectCode}&quot;</span><span class="p">);</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">spcCode</span> <span class="o">=</span> <span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="p">)(</span><span class="n">JSFUtils</span><span class="o">.</span><span class="n">resolveExpression</span><span class="p">(</span><span class="s2">&quot;#{pageFlowScope.spcCode}&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">null</span><span class="o">?</span><span class="n">null</span><span class="o">:</span><span class="n">JSFUtils</span><span class="o">.</span><span class="n">resolveExpression</span><span class="p">(</span><span class="s2">&quot;#{pageFlowScope.spcCode}&quot;</span><span class="p">));</span>
+        <span class="n">if</span><span class="p">(</span><span class="n">userId</span><span class="o">==</span><span class="n">null</span><span class="o">||</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">userId</span><span class="p">))</span><span class="err">{</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">severe</span><span class="p">(</span><span class="s2">&quot;userId is null &quot;</span><span class="p">);</span>
+            <span class="n">FacesMessage</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">new</span> <span class="n">FacesMessage</span><span class="p">(</span><span class="s2">&quot;用户为空请重试!&quot;</span><span class="p">);</span>
+            <span class="n">JSFUtils</span><span class="o">.</span><span class="n">getFacesContext</span><span class="p">()</span><span class="o">.</span><span class="n">addMessage</span><span class="p">(</span><span class="n">null</span><span class="o">,</span> <span class="n">msg</span><span class="p">);</span>
+            <span class="n">return</span> <span class="s2">&quot;NO&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nt">if</span><span class="o">(</span><span class="nt">projectCode</span><span class="o">==</span><span class="nt">null</span><span class="o">||</span><span class="s2">&quot;&quot;</span><span class="nc">.equals</span><span class="o">(</span><span class="nt">projectCode</span><span class="o">))</span><span class="p">{</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">severe</span><span class="p">(</span><span class="s2">&quot;projectCode is null &quot;</span><span class="p">);</span>
+            <span class="n">FacesMessage</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">new</span> <span class="n">FacesMessage</span><span class="p">(</span><span class="s2">&quot;项目ID为空请重试!&quot;</span><span class="p">);</span>
+            <span class="n">JSFUtils</span><span class="o">.</span><span class="n">getFacesContext</span><span class="p">()</span><span class="o">.</span><span class="n">addMessage</span><span class="p">(</span><span class="n">null</span><span class="o">,</span> <span class="n">msg</span><span class="p">);</span>
+            <span class="n">return</span> <span class="s2">&quot;NO&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c">/******</span>
+<span class="c">         * </span>
+<span class="c">         * 生成发出专业SQL,生成接受专业SQL</span>
+<span class="c">         * </span>
+<span class="c">         * ****/</span>
+        <span class="nt">String</span> <span class="nt">sendSql</span><span class="o">=</span><span class="s2">&quot; xSPECIALTY &lt;matches&gt; `NULL` &quot;</span><span class="o">;</span>
+        <span class="nt">String</span> <span class="nt">receiveSql</span><span class="o">=</span><span class="s2">&quot; xRCV_MAJOR &lt;matches&gt; `NULL` &quot;</span><span class="o">;</span>
+        <span class="nt">if</span><span class="o">(</span><span class="nt">spcCode</span><span class="o">==</span><span class="nt">null</span><span class="o">||</span><span class="nt">spcCode</span><span class="nc">.size</span><span class="o">()==</span><span class="nt">0</span><span class="o">)</span><span class="p">{</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">severe</span><span class="p">(</span><span class="s2">&quot;spcCode is null or size is 0&quot;</span><span class="p">);</span>  
+            <span class="n">return</span> <span class="s2">&quot;NO&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nt">for</span><span class="o">(</span><span class="nt">int</span> <span class="nt">i</span><span class="o">=</span><span class="nt">0</span><span class="o">;</span><span class="nt">i</span><span class="o">&lt;</span><span class="nt">spcCode</span><span class="nc">.size</span><span class="o">();</span><span class="nt">i</span><span class="o">++)</span><span class="p">{</span>
+            <span class="n">sendSql</span><span class="o">=</span><span class="n">sendSql</span><span class="o">+</span><span class="s2">&quot; &lt;OR&gt; &quot;</span><span class="o">+</span><span class="s2">&quot;xSPECIALTY &lt;matches&gt; `&quot;</span><span class="o">+</span><span class="n">spcCode</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;` &quot;</span><span class="p">;</span>
+            <span class="n">receiveSql</span><span class="o">=</span><span class="n">receiveSql</span><span class="o">+</span><span class="s2">&quot; &lt;OR&gt; &quot;</span><span class="o">+</span><span class="s2">&quot;xRCV_MAJOR &lt;matches&gt; `&quot;</span><span class="o">+</span><span class="n">spcCode</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;` &quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nt">sendSql</span><span class="o">=</span><span class="s2">&quot;(&quot;</span><span class="o">+</span><span class="nt">sendSql</span><span class="o">+</span><span class="s2">&quot;) &lt;AND&gt; dDocType &lt;matches&gt; `PJT-INTERFACE-DOC` &lt;AND&gt; xPROJECT_NUM &lt;starts&gt; `&quot;</span><span class="o">+</span><span class="nt">projectCode</span><span class="o">+</span><span class="s2">&quot;`&quot;</span><span class="o">;</span>
+        <span class="nt">receiveSql</span><span class="o">=</span><span class="s2">&quot;(&quot;</span><span class="o">+</span><span class="nt">receiveSql</span><span class="o">+</span><span class="s2">&quot;) &lt;AND&gt; dDocType &lt;matches&gt; `PJT-INTERFACE-DOC` &lt;AND&gt; xPROJECT_NUM &lt;starts&gt; `&quot;</span><span class="o">+</span><span class="nt">projectCode</span><span class="o">+</span><span class="s2">&quot;`&quot;</span><span class="o">;</span>
+        <span class="nt">LOGGER</span><span class="nc">.severe</span><span class="o">(</span><span class="s2">&quot;sendSql:&quot;</span><span class="o">+</span><span class="nt">sendSql</span><span class="o">);</span>
+        <span class="nt">LOGGER</span><span class="nc">.severe</span><span class="o">(</span><span class="s2">&quot;receiveSql:&quot;</span><span class="o">+</span><span class="nt">receiveSql</span><span class="o">);</span>
+        <span class="c">/*** </span>
+<span class="c">         * 查询当前用户在该项目中的专业（ME,EL等)，拼接QueryText</span>
+<span class="c">         * dDocType &lt;matches&gt; `PJT-INTERFACE-DOC`</span>
+<span class="c">         * ******/</span>
+        <span class="nt">UCMAdapter</span> <span class="nt">ap</span><span class="o">=</span><span class="nt">new</span> <span class="nt">UCMAdapter</span><span class="o">();</span>
+        <span class="nt">this</span><span class="nc">.sendDocumentList</span> <span class="o">=</span> <span class="o">(</span><span class="nt">ArrayList</span><span class="o">&lt;</span><span class="nt">Document</span><span class="o">&gt;)</span><span class="nt">ap</span><span class="nc">.search</span><span class="o">(</span><span class="nt">userId</span><span class="nc">.toString</span><span class="o">(),</span> <span class="nt">sendSql</span><span class="o">);</span>
+        <span class="nt">this</span><span class="nc">.receiveDocumentList</span> <span class="o">=</span> <span class="o">(</span><span class="nt">ArrayList</span><span class="o">&lt;</span><span class="nt">Document</span><span class="o">&gt;)</span><span class="nt">ap</span><span class="nc">.search</span><span class="o">(</span><span class="nt">userId</span><span class="nc">.toString</span><span class="o">(),</span> <span class="nt">receiveSql</span><span class="o">);</span>
+        <span class="nt">LOGGER</span><span class="nc">.severe</span><span class="o">(</span><span class="s2">&quot;success init...YES.&quot;</span><span class="o">);</span>
+        <span class="nt">return</span> <span class="s2">&quot;YES&quot;</span><span class="o">;</span>
+    <span class="err">}</span>
+
+    <span class="nt">public</span> <span class="nt">void</span> <span class="nt">setReceiveDocumentList</span><span class="o">(</span><span class="nt">ArrayList</span><span class="o">&lt;</span><span class="nt">Document</span><span class="o">&gt;</span> <span class="nt">receiveDocumentList</span><span class="o">)</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">receiveDocumentList</span> <span class="o">=</span> <span class="n">receiveDocumentList</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nt">public</span> <span class="nt">ArrayList</span><span class="o">&lt;</span><span class="nt">Document</span><span class="o">&gt;</span> <span class="nt">getReceiveDocumentList</span><span class="o">()</span> <span class="p">{</span>
+        <span class="n">return</span> <span class="n">receiveDocumentList</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nt">public</span> <span class="nt">void</span> <span class="nt">setSendDocumentList</span><span class="o">(</span><span class="nt">ArrayList</span><span class="o">&lt;</span><span class="nt">Document</span><span class="o">&gt;</span> <span class="nt">sendDocumentList</span><span class="o">)</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">sendDocumentList</span> <span class="o">=</span> <span class="n">sendDocumentList</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nt">public</span> <span class="nt">ArrayList</span><span class="o">&lt;</span><span class="nt">Document</span><span class="o">&gt;</span> <span class="nt">getSendDocumentList</span><span class="o">()</span> <span class="p">{</span>
+        <span class="n">return</span> <span class="n">sendDocumentList</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="err">}</span>
+</pre></div><p class="subheader">Category: <a href="http://localhost:8000/category/webcenter.html">webcenter</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/ecm.html">ECM </a>
+</p>
+
+
+
+            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/ding-zhi-webcenterde-people-connectionzu-jian.html"><h3 class="article-title">定制webcenter的people connection组件</h3></a>
+<h6 class="subheader" title="2014-10-23T00:00:00+08:00">2014-10-23(Thursday) 00:00
+</h6>
+
+
+<h4><i class="icon-file"></i>   需求：</h4>
+<p>webcenter的people connection类似于微博的关注粉丝功能，现在需要利用程序让某一用户自动关注一批人员。比如某一用户所在项目<code>(PROJECT1)</code>下有10个成员，则该用户进入portal的时候默认就展示其项目下的10个成员在某一分组<code>(PROJECT1)</code>下。</p>
+<h4><i class="icon-folder-open"></i> 分析：</h4>
+<p>根据项目PROJECT1可以查询出10个成员名；
+利用API将10个成员添加到Connections中；
+利用API创建Connection list，也即是分组名<code>(PROJECT1)</code>；
+将10个成员的Connection 添加到分组PROJECT1中。</p>
+<h4><i class="icon-pencil"></i> 技术实现：</h4>
+<ul>
+<li>
+<p>根据项目PROJECT1可以查询出10个成员名；
+在AMimpl中创建查询成员名方法以List返回结果。
+    public List<String> getAllMembersByProjectId(String proId){
+        List<String> result=new ArrayList<String>();
+        result.add("CG02");
+        result.add("CG03");
+        result.add("CG04");
+        result.add("CG05");
+        result.add("pierre");
+        result.add("weblogic");
+        //TODO …</string></string></string></p></li></ul><p class="subheader">Category: <a href="http://localhost:8000/category/webcenter.html">webcenter</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/peopleconnection.html">peopleConnection </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/ding-zhi-webcenterde-people-connectionzu-jian.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/webcenter-portaldiao-yong-document-service.html"><h3 class="article-title">webcenter portal调用document service</h3></a>
+<h6 class="subheader" title="2014-08-26T00:00:00+08:00">2014-08-26(Tuesday) 00:00
+</h6>
+
+
+<p><strong>平台:</strong> webcenter 1.8</p>
+<h4><i class="icon-file"></i> Webcenter Contents端配置</h4>
+<blockquote>
+<p><strong>步骤:</strong></p>
+<ul>
+<li>进入webcenter contents http://192.168.15.251:16210/cs/idcplg</li>
+<li>展开administration目录</li>
+<li>Admin Server节点</li>
+<li>Component Manager 里</li>
+<li>开启以下特性<code>FrameworkFolders</code>(原<code>Floder_g</code>，已被<code>FrameworkFolders</code>替代)，<code>WebCenterConfigure</code>, <code>DynamicConverter</code></li>
+<li>重启UCM</li>
+</ul>
+</blockquote>
+<h4><i class="icon-file"></i>  Webcenter Portal端配置</h4>
+<blockquote>
+<p><strong>进入Portal管理界面:</strong></p>
+<ul>
+<li>切换到Portals标签</li>
+<li>Tools and Services菜单里</li>
+<li>设置Documents服务为enabled即可</li>
+</ul>
+</blockquote><p class="subheader">Category: <a href="http://localhost:8000/category/webcenter.html">webcenter</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/documentservice.html">documentservice </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/webcenter-portaldiao-yong-document-service.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/chuang-jian-content-repositoryshi-chu-xian-cuo-wu.html"><h3 class="article-title">创建Content Repository时出现错误</h3></a>
+<h6 class="subheader" title="2014-08-25T00:00:00+08:00">2014-08-25(Monday) 00:00
+</h6>
+
+
+<h4><i class="icon-file"></i><strong>创建Content Repository时出现错误：</strong></h4>
+<blockquote>
+<p><strong>NOTE:</strong></p>
+<ul>
+<li>Unable to load content server metadata model using GET_DOC_METADATA_INFO.</li>
+<li>Permission denied. Address 'XX.XX.XX.XX' is not an allowable remote socket address</li>
+</ul>
+</blockquote>
+<h4><i class="icon-file"></i> <strong>解决方法:</strong></h4>
+<blockquote>
+<ul>
+<li>
+<p><i class="icon-pencil"></i> 找到config.cfg   <br>
+<code>/u02/app/oraucm/fmw_home/user_projects/domains/ecm_domain/ucm/cs/config/config.cfg</code></p>
+</li>
+<li>
+<p><i class="icon-pencil"></i>在SocketHostAddressSecurityFilter值加上<code>|*.*.*.*</code>
+SocketHostAddressSecurityFilter=127.0.0.1|192.168.15 …</p></li></ul></blockquote><p class="subheader">Category: <a href="http://localhost:8000/category/webcenter.html">webcenter</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/webcenter.html">webcenter </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/chuang-jian-content-repositoryshi-chu-xian-cuo-wu.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://localhost:8000/jive-forums-admin-console-guan-li-yuan-zhang-hu-mi-ma-zhong-zhi.html"><h3 class="article-title">"Jive Forums admin console 管理员账户密码重置"</h3></a>
+<h6 class="subheader" title="2013-03-20T00:00:00+08:00">2013-03-20(Wednesday) 00:00
+</h6>
+
+
+<h4><i class="icon-file"></i>   需求：</h4>
+<p>webcenter集成AD 之后发现Discussion控件用不了，使用weblogic账号也无法进入Jive forums的控制台，但是weblogic控制台可以登录。于是想重置Jive Forums的管理账号密码。</p>
+<h4><i class="icon-folder-open"></i> 分析：</h4>
+<p>修改jiveuser表将管理员账户密码更新即可。</p>
+<h4><i class="icon-pencil"></i> 技术实现：</h4>
+<ul>
+<li>连接到FM_DISCUSSIONS schema，查询jiveuser，发现passwordhash字段值变为了"-"字符，可能是集成AD之后这边的数据被覆盖了，按字段名推测密码应该是hash加密后的密文，于是将weblogic用户的密码通过MD5加密生成密文更新该字段，重启webcenter之后，问题解决。</li>
+</ul>
+<p>附：
+        //password: Welcome1 
+        update jiveuser set passwordhash='b56e0b4ea4962283bee762525c2d490f' where username='weblogic'</p><p class="subheader">Category: <a href="http://localhost:8000/category/webcenter.html">webcenter</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/jive.html">Jive </a>
+</p>
+
+
+
+                <a class="button radius secondary small right" href="http://localhost:8000/jive-forums-admin-console-guan-li-yuan-zhang-hu-mi-ma-zhong-zhi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+            <!-- /#posts-list -->
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

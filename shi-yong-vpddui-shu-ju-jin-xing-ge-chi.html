@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>使用VPD对数据进行隔离</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/shi-yong-vpddui-shu-ju-jin-xing-ge-chi.html" rel="bookmark"
+        title="Permalink to 使用VPD对数据进行隔离">使用VPD对数据进行隔离</a></h3>
+    </header>
+
+<h6 class="subheader" title="2012-06-28T00:00:00+08:00">2012-06-28(Thursday) 00:00
+</h6>
+
+
+    <p>项目需求：系统数据表删除操作是直接物理删除，不利于维护历史记录，需要变更为逻辑删除模式。</p>
+
+<p>解决方案：</p>
+
+<p>对表增加删除标记字段DEL_FLAG varchar2(1) default ‘0’;</p>
+
+<p>用户执行“删除”操作时，并不执行物理删除操作，而是将DEL_FLAG值设置为‘1’；</p>
+
+<p>针对数据展示时，删除标记为’1’的数据使用VPD技术屏蔽访问；</p>
+
+<p><strong>1．需要修改的基表[T]新增删除字段：</strong></p>
+
+<p><strong>alter table</strong> T <strong>add</strong> (DEL_FLAG varchar2(1) <strong>default</strong> '0');--缺省为0，逻辑删除改为1</p>
+
+<p><strong>2．创建VPD需要的函数：</strong><strong>f_limited_query_t</strong><strong></strong></p>
+
+<p><strong>CREATE OR REPLACE FUNCTION</strong> f_limited_query_t (s_schema <strong>IN</strong> VARCHAR2,</p>
+
+<p>s_object <strong>IN</strong> VARCHAR2)</p>
+
+<p><strong>RETURN</strong> VARCHAR2</p>
+
+<p><strong>AS</strong></p>
+
+<p><strong>BEGIN</strong></p>
+
+<p><strong>RETURN</strong> 'DEL_FLAG!='''||'1'||'''';</p>
+
+<p><strong>END;</strong></p>
+
+<p><strong>3．创建策略：</strong><strong>POLICY_LIMITED_QUERY_T</strong><strong></strong></p>
+
+<p><strong>BEGIN</strong>
+DBMS_RLS.add_policy (object_schema   =&gt; 'APPS',<br />
+object_name     =&gt; 'T',<br />
+policy_name     =&gt; 'POLICY_LIMITED_QUERY_T',<br />
+function_schema =&gt; 'APPS',<br />
+policy_function =&gt; 'F_LIMITED_QUERY_T');
+<strong>END</strong>;</p>
+
+<p><strong>取消策略：</strong><strong>(</strong>不用过滤时使用此命令<strong>)</strong></p>
+
+<p><strong>BEGIN</strong>
+DBMS_RLS.drop_policy (object_schema   =&gt; 'APPS',<br />
+object_name     =&gt; 'T',<br />
+policy_name     =&gt; 'POLICY_LIMITED_QUERY_T');
+<strong>END</strong>;<strong></strong></p>
+
+<p>&nbsp;</p>
+
+<p><strong>4．修改FORM中对相关数据表的删除逻辑为更新DEL_FLAG=1的操作；</strong></p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/oracle.html">oracle</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/vpd.html">VPD </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>dengdezhao - SSL</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://localhost:8000/weblogic-ssl.html"><h3 class="article-title">weblogic配置SSL</h3></a>
+<h6 class="subheader" title="2016-06-29T22:20:00+08:00">2016-06-29(Wednesday) 22:20
+</h6>
+
+
+<h3>申请www.dengdezhao.cn的服务器证书</h3>
+<ul>
+<li>提交电子流给www.dengdezhao.cn域名申请服务器证书</li>
+<li>电子流通过后会得到cert.pfx证书文件以及证书安装密码“password"(此处为方便理解以password代替)</li>
+</ul>
+<h3>将得到的pfx证书拆分成crt以及key ###</h3>
+<ul>
+<li>安装openssl</li>
+<li>切换到openssl/bin目录，将cert.pfx放置在该目录</li>
+<li>执行命令:<code>openssl pkcs12 -in cert.pfx -nodes -out ddz/prod.pem</code></li>
+<li>提示输入密码,输入"password"</li>
+<li>执行命令：<code>openssl x509 -in ddz/prod.pem -out ddz/prod.crt</code>得到crt证书</li>
+</ul>
+<h3>转换crt证书为p7b</h3>
+<ul>
+<li>双击prod.crt切到”详细信息"标签,点击按钮"复制到文件"</li>
+<li>下一步,选P7B证书，并选中"如果可能,则数据包括证书路径中的所有证书"</li>
+<li>另存为prod.p7b即完成证书转换</li>
+</ul>
+<h3>转换crt证书为p12</h3>
+<ul>
+<li>执行命令：<code>openssl pkcs12 -export -clcerts -inkey ddz/prod.pem -in ddz/prod.crt -out ddz/ewallet.p12</code></li>
+<li>提示设置密码,设置为oracle1234（安装时要用到)</li>
+<li>将ewallet.p12以及prod.p7b上传到服务器路径/data01/oracle/req下</li>
+</ul>
+<h3>配置owm 钱包安装证书</h3>
+<ul>
+<li>ITOC连接到服务器</li>
+<li>切换到/data01/oracle/adf/Oracle_WT1/bin目录</li>
+<li>运行./owm &amp;</li>
+<li>在弹出的wallet窗口选择打开/data01/oracle/req下的钱包</li>
+<li>输入密码上一步设置的oracle1234</li>
+<li>可以看到是个空的钱包，在左侧“Trusted Certificates"上右键导入prod.p7b</li>
+<li>导入成功即可看到三个证书文件在左侧栏</li>
+<li>勾选wallet菜单下的Auto login项</li>
+<li>然后SAVE钱包退出。</li>
+</ul>
+<h3>配置 SSL.conf</h3>
+<ul>
+<li>切换到OHS的配置目录/data01/oracle/adf/Oracle_WT1/instances/instance1/config/OHS/ohs1/</li>
+<li>编辑ssl.conf文件修改Listen Port为443</li>
+<li>修改VirtualHost *：443</li>
+<li>修改SSLWallet路径为 "/data01/oracle/req"</li>
+<li>保存退出</li>
+</ul>
+<h3>重启OHS</h3>
+<ul>
+<li>重启OHS之后即可验证HTTPS访问是否可行。</li>
+</ul><p class="subheader">Category: <a href="http://localhost:8000/category/weblogic.html">weblogic</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/weblogic.html">weblogic </a>
+    <a href="http://localhost:8000/tag/ssl.html">SSL </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

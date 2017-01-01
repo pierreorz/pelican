@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>adf:tree做的树菜单如何过滤子节点的数据？</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/adftreezuo-de-shu-cai-dan-ru-he-guo-lu-zi-jie-dian-de-shu-ju.html" rel="bookmark"
+        title="Permalink to adf:tree做的树菜单如何过滤子节点的数据？">adf:tree做的树菜单如何过滤子节点的数据？</a></h3>
+    </header>
+
+<h6 class="subheader" title="2012-06-26T00:00:00+08:00">2012-06-26(Tuesday) 00:00
+</h6>
+
+
+    <p>需求：项目中的树菜单需要权限用户的权限过滤显示子菜单，通过用户所在的用户组可以查看的页面ID（List)过滤子节点<br />
+解决方案：<br />
+因为树是通过viewLink关联自身的VO生成的，想在AM里添加方法，对VO进行过滤处理把结果返回。<br />
+但实现起来比较麻烦，调用方法之后要刷新页面，初始化的树数据过滤处理困难。<br />
+于是想重写VO的方法看能不能在VO层就过滤掉子节点。重写createViewLinkAccessorRS，此方法返回ViewLink的结果，也就是菜单的子节点数据
+<div>
+<blockquote>
+@Override<br />
+protected ViewRowSetImpl createViewLinkAccessorRS(AssociationDefImpl associationDefImpl,<br />
+ViewObjectImpl viewObjectImpl,<br />
+Row row,<br />
+Object[] object) {<br />
+ViewRowSetImpl viewRowSetImpl =<br />
+super.createViewLinkAccessorRS(associationDefImpl, viewObjectImpl,<br />
+row, object);<br />
+int count = 0;<br />
+// getList()拿到可以查看的pageId的列表，对比Row中的pageId属性，如果在List中存在，就取该Row，如果不存      //在，表示此子节点不予以显示，remove掉<br />
+if (this.getList() != null &amp;&amp; this.getList().size() != 0 &amp;&amp;<br />
+viewRowSetImpl != null) {<br />
+for (int m = 0; m &lt; viewRowSetImpl.getRowCount(); m++) {<br />
+if (viewRowSetImpl.getRow(m).getAttribute("pageId") ==<br />
+null) {<br />
+continue;<br />
+}
+for (int i = 0; i &lt; this.getList().size(); i++) {<br />
+if (this.getList().get(i).equals(viewRowSetImpl.getRow(m).getAttribute("pageId"))) {<br />
+count++;<br />
+}
+}<br />
+if (count == 0) {<br />
+viewRowSetImpl.removeRowAt(m);<br />
+//因为remove掉一行之后，viewRowSetImpl的RowCount就少了1，需要给m也减一，不然可漏掉一行数据未处理。<br />
+m--;<br />
+}
+count = 0;<br />
+}
+}</blockquote></div></p>
+
+<p>return viewRowSetImpl;</p>
+
+<p>}
+
+如此重写了这个方法之后，在调用的时候需要给List赋值，以方便过滤。因此需要给List的 SetList()方法生成Client接口。<br />
+在VO中为setList()添加clientInterface.
+<div>
+<blockquote>&lt;ClientInterface&gt;<br />
+&lt;Method<br />
+Name="setList"&gt;<br />
+&lt;Return<br />
+Type="void"/&gt;<br />
+&lt;Parameter<br />
+Name="list"<br />
+Type="java.util.ArrayList"<br />
+IsGeneric="true"&gt;<br />
+&lt;Element<br />
+Type="java.lang.String"/&gt;<br />
+&lt;/Parameter&gt;<br />
+&lt;/Method&gt;<br />
+&lt;/ClientInterface&gt;</blockquote>
+</div>
+这样，只需要在页面初始化的时候，给这个VO的list赋值，就可以过滤子节点了
+<div>
+<blockquote>DCIteratorBinding it2 = ADFUtils.findIterator("MenuVO1Iterator");<br />
+MenuVOImpl vo2 = (MenuVOImpl)it2.getViewObject();<br />
+vo2.setList(list);    //给VO的List赋值。<br />
+vo2.executeQuery();</blockquote>
+</div></p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/adf.html">ADF </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>

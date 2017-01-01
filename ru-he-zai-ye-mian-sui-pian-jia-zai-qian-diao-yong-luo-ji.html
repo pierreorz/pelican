@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>"如何在页面碎片加载前调用逻辑"</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/style.css" />
+    <link rel="stylesheet" href="http://localhost:8000/theme/css/pygments.css" />	
+    <script src="http://localhost:8000/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://localhost:8000">dengdezhao</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://localhost:8000/ru-he-zai-ye-mian-sui-pian-jia-zai-qian-diao-yong-luo-ji.html" rel="bookmark"
+        title="Permalink to "如何在页面碎片加载前调用逻辑"">"如何在页面碎片加载前调用逻辑"</a></h3>
+    </header>
+
+<h6 class="subheader" title="2013-09-23T00:00:00+08:00">2013-09-23(Monday) 00:00
+</h6>
+
+
+    <ul>
+<li>
+<p>平台:Jdeveloper 12c</p>
+</li>
+<li>
+<p>需求：在JSPX页面加载前如果需要调用逻辑可以通过重写PhaseListener实现，如果在JSFF页面碎片加载前（也即是region加载前）调用应该如何实现？</p>
+</li>
+</ul>
+<p><strong>实现方法</strong></p>
+<p>重写RegionController方法可以达到以上需求。</p>
+<ul>
+<li>重写 RegionController类，在refreshRegion方法中加入需要调用的逻辑即可在页面碎片加载之前调用。</li>
+</ul>
+<p>{% codeblock lang:java %}
+package cn.dengdezhao;
+import oracle.adf.model.RegionContext;
+import oracle.adf.model.RegionController;
+public class myController implements RegionController {
+    public myController() {
+        super();
+    }
+    @Override
+    public boolean refreshRegion(RegionContext regionContext) {
+        // TODO Implement this method
+        int flag=regionContext.getRefreshFlag();
+        System.out.println("refreshRegion...");      </p>
+<div class="highlight"><pre><span></span>    return false;
+}
+@Override
+public boolean validateRegion(RegionContext regionContext) {
+    // TODO Implement this method
+
+    return false;
+}
+@Override
+public boolean isRegionViewable(RegionContext regionContext) {
+    // TODO Implement this method
+
+    return false;
+}
+@Override
+public String getName() {
+    // TODO Implement this method
+
+    return null;
+}
+</pre></div>
+
+
+<p _="%" endcodeblock>}</p>
+<ul>
+<li>配置页面碎片pagedef页</li>
+</ul>
+<p _="%" endcodeblock>{% codeblock lang:xml %}
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.1.2.66.68" id="iteratorInputPageDef"
+                ControllerClass="cn.dengdezhao.myController"
+                Package="cn.dengdezhao.pageDefs">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+  </executables>
+  <bindings/>
+</pageDefinition></p>
+<p><strong>结论</strong></p>
+<p>通过重写regionController类可以实现在页面碎片加载前调用POPUP提示等之类的需求。</p>
+<p class="subheader">Category: <a href="http://localhost:8000/category/adf.html">ADF</a>
+
+    Tagged: 
+    <a href="http://localhost:8000/tag/regioncontroller.html">RegionController </a>
+</p>
+
+
+
+
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/archives.html">Archives</a>
+            <li><a href="http://localhost:8000/tags.html">Tags</a>
+            <li><a href="http://localhost:8000/feeds/atom.xml" rel="alternate">Atom feed</a></li>
+            <li><a href="http://localhost:8000/feeds/rss.xml" rel="alternate">RSS feed</a></li>
+	    <li><a href="http://localhost:8000/about.html">About</a></li>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://localhost:8000/category/adf.html">ADF</a></li>
+            <li><a href="http://localhost:8000/category/ebs.html">ebs</a></li>
+            <li><a href="http://localhost:8000/category/java.html">java</a></li>
+            <li><a href="http://localhost:8000/category/linux.html">linux</a></li>
+            <li><a href="http://localhost:8000/category/octopress.html">octopress</a></li>
+            <li><a href="http://localhost:8000/category/oracle.html">oracle</a></li>
+            <li><a href="http://localhost:8000/category/others.html">others</a></li>
+            <li><a href="http://localhost:8000/category/sinaapp.html">sinaapp</a></li>
+            <li><a href="http://localhost:8000/category/soa.html">soa</a></li>
+            <li><a href="http://localhost:8000/category/webcenter.html">webcenter</a></li>
+            <li><a href="http://localhost:8000/category/weblogic.html">weblogic</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://oracleseeker.com">OracleSeeker</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>dengdezhao by pierreorz</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>
